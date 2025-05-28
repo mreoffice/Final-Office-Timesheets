@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MRE Timesheet</title>
+    <title>MRE Timesheet - Enterprise Time & Attendance System</title>
     <style>
         * {
             margin: 0;
@@ -13,85 +13,720 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f5f7fa;
-            color: #2c3e50;
+            background: #f0f2f5;
+            color: #1a1a1a;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* Header Styles */
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: white;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .company-name {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Loading Screen */
-        .loading-screen {
+        /* Login Screen Styles */
+        .login-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             z-index: 9999;
-            transition: opacity 0.3s ease;
-        }
-        
-        .loading-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
         }
 
-        .loading-content {
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            padding: 40px;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .login-logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .login-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .login-methods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .login-method {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-method:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .login-method.active {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .login-method-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .login-method-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .login-form {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .login-form.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .pin-input-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .pin-digit {
+            width: 50px;
+            height: 60px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .pin-digit:focus {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .pin-digit.filled {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .employee-photo-confirm {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: block;
+            border: 4px solid #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .biometric-container {
+            padding: 40px;
             text-align: center;
         }
 
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
+        .fingerprint-scanner {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            border: 3px solid #667eea;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .fingerprint-scanner::before {
+            content: "👆";
+            font-size: 48px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
-        /* Cards and Sections */
-        .card {
-            background: white;
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: #667eea;
+            top: 0;
+            animation: scan 2s linear infinite;
+        }
+
+        @keyframes scan {
+            to {
+                top: 100%;
+            }
+        }
+
+        .qr-scanner {
+            border: 2px dashed #667eea;
             border-radius: 10px;
+            padding: 40px;
+            margin: 20px 0;
+            background: #f8f9ff;
+        }
+
+        .qr-icon {
+            font-size: 64px;
+            margin-bottom: 10px;
+        }
+
+        /* Main Application Styles */
+        .main-app {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .main-app.active {
+            display: block;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .company-logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #667eea;
+        }
+
+        .user-details {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff3838;
+        }
+
+        /* Navigation */
+        .nav-container {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 70px;
+            z-index: 90;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            background: white;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-tab:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-tab-icon {
+            font-size: 18px;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
             padding: 20px;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Time Clock Section */
+        .time-clock-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .time-clock-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .clock-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .current-time {
+            font-size: 48px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .current-date {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .clock-status {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
             margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .clock-status.clocked-out {
+            background: #ffe0e0;
+            color: #ff4757;
+        }
+
+        .clock-status.clocked-in {
+            background: #d4f8d4;
+            color: #27ae60;
+        }
+
+        .clock-status.on-break {
+            background: #fff3cd;
+            color: #f39c12;
+        }
+
+        .clock-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .clock-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .clock-btn.clock-in {
+            background: #27ae60;
+            color: white;
+        }
+
+        .clock-btn.clock-in:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        .clock-btn.clock-out {
+            background: #ff4757;
+            color: white;
+        }
+
+        .clock-btn.clock-out:hover {
+            background: #ff3838;
+            transform: translateY(-2px);
+        }
+
+        .clock-btn.lunch {
+            background: #f39c12;
+            color: white;
+        }
+
+        .clock-btn.lunch:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        .clock-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Time Summary Card */
+        .time-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .summary-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .summary-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .summary-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .summary-value.earnings {
+            color: #27ae60;
+        }
+
+        .summary-value.overtime {
+            color: #f39c12;
+        }
+
+        .summary-value.idle {
+            color: #ff4757;
+        }
+
+        /* Activity Monitor */
+        .activity-monitor {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .activity-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.active {
+            background: #27ae60;
+        }
+
+        .status-indicator.idle {
+            background: #f39c12;
+        }
+
+        .status-indicator.inactive {
+            background: #ff4757;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(39, 174, 96, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(39, 174, 96, 0);
+            }
+        }
+
+        .activity-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .activity-metric {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            background: #e8f5e9;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        /* Productivity Score */
+        .productivity-score {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+
+        .score-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .score-value {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .score-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: white;
+            transition: width 0.5s ease;
+        }
+
+        .score-message {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Project Time Entry */
+        .time-entry-section {
+            margin-top: 30px;
         }
 
         .section-header {
@@ -101,355 +736,244 @@
             margin-bottom: 20px;
         }
 
-        .section-header h2 {
-            font-size: 20px;
-            color: #2c3e50;
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
         }
 
-        /* Buttons */
-        .action-btn {
+        .add-entry-btn {
             padding: 10px 20px;
+            background: #667eea;
+            color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .add-entry-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .time-entries-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .time-entry-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .time-entry-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+        }
+
+        .entry-info {
+            flex: 1;
+        }
+
+        .entry-project {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .project-badge {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .entry-task {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .entry-time {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .entry-duration {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-right: 20px;
+        }
+
+        .entry-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .entry-action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 500;
             transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
         }
 
-        .action-btn.primary {
-            background: #3498db;
-            color: white;
+        .entry-action-btn.edit {
+            background: #e8f5e9;
+            color: #27ae60;
         }
 
-        .action-btn.primary:hover {
-            background: #2980b9;
-        }
-
-        .action-btn.success {
+        .entry-action-btn.edit:hover {
             background: #27ae60;
             color: white;
         }
 
-        .action-btn.success:hover {
-            background: #229954;
+        .entry-action-btn.delete {
+            background: #ffe0e0;
+            color: #ff4757;
         }
 
-        .action-btn.warning {
-            background: #f39c12;
+        .entry-action-btn.delete:hover {
+            background: #ff4757;
             color: white;
         }
 
-        .action-btn.warning:hover {
-            background: #e67e22;
-        }
-
-        .action-btn.danger {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .action-btn.danger:hover {
-            background: #c0392b;
-        }
-
-        .action-btn.secondary {
-            background: #ecf0f1;
-            color: #2c3e50;
-        }
-
-        .action-btn.secondary:hover {
-            background: #bdc3c7;
-        }
-
-        .action-btn.small {
-            padding: 5px 10px;
-            font-size: 12px;
-        }
-
-        /* Admin Navigation */
-        .admin-nav {
+        /* Timer Control */
+        .timer-control {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 15px;
         }
 
-        .admin-nav-btn {
-            padding: 12px 24px;
-            background: #ecf0f1;
+        .timer-display {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            font-variant-numeric: tabular-nums;
+            min-width: 100px;
+        }
+
+        .timer-btn {
+            padding: 10px 20px;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 6px;
             font-weight: 500;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .admin-nav-btn.active {
-            background: #3498db;
+        .timer-btn.start {
+            background: #27ae60;
             color: white;
         }
 
-        .admin-nav-btn:hover:not(.active) {
-            background: #bdc3c7;
+        .timer-btn.stop {
+            background: #ff4757;
+            color: white;
         }
 
-        /* Employee Management Grid */
-        .employee-management-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+        .timer-btn:hover {
+            transform: translateY(-2px);
         }
 
-        .employee-mgmt-card {
+        /* Schedule View */
+        .schedule-container {
             background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .employee-mgmt-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .employee-header {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .employee-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .employee-info h3 {
-            margin-bottom: 5px;
-            color: #2c3e50;
-        }
-
-        .employee-id {
-            font-size: 12px;
-            color: #7f8c8d;
-            margin-bottom: 5px;
-        }
-
-        .employee-type {
-            display: inline-block;
-            padding: 3px 10px;
             border-radius: 15px;
-            font-size: 11px;
-            font-weight: 600;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
-        .employee-type.hourly {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .employee-type.salary {
-            background: #e3f2fd;
-            color: #1565c0;
-        }
-
-        .employee-details {
-            margin-bottom: 15px;
-        }
-
-        .detail-row {
+        .schedule-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .rate-value {
-            font-weight: 600;
-            color: #27ae60;
-        }
-
-        .status-badge {
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .status-badge.active {
-            background: #d5f4e6;
-            color: #27ae60;
-        }
-
-        .employee-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Payroll Dashboard */
-        .payroll-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            align-items: center;
             margin-bottom: 30px;
         }
 
-        .payroll-card {
-            background: white;
-            border-radius: 10px;
+        .schedule-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .schedule-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .schedule-day {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 20px;
             padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .payroll-card h3 {
-            font-size: 14px;
-            color: #7f8c8d;
-            margin-bottom: 10px;
-        }
-
-        .payroll-amount {
-            font-size: 28px;
-            font-weight: 700;
-            color: #2c3e50;
-        }
-
-        /* Tables */
-        .payroll-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .payroll-table th,
-        .payroll-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        .payroll-table th {
             background: #f8f9fa;
-            font-weight: 600;
-            color: #2c3e50;
+            border-radius: 10px;
+            align-items: center;
         }
 
-        .payroll-table tr:hover {
-            background: #f8f9fa;
-        }
-
-        .type-badge {
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .type-badge.hourly {
+        .schedule-day.today {
             background: #e8f5e9;
-            color: #2e7d32;
+            border: 2px solid #27ae60;
         }
 
-        .type-badge.salary {
-            background: #e3f2fd;
-            color: #1565c0;
+        .day-name {
+            font-weight: 600;
+            color: #333;
         }
 
-        /* Request Cards */
-        .requests-container {
-            margin-top: 30px;
-        }
-
-        .request-card {
-            background: #fffbf0;
-            border: 1px solid #f39c12;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-
-        .request-header {
+        .schedule-times {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
-        .request-date {
-            color: #7f8c8d;
-            font-size: 14px;
-        }
-
-        .rate-comparison {
+        .schedule-time {
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
+            gap: 5px;
+            color: #666;
         }
 
-        .rate-item {
-            text-align: center;
-        }
-
-        .rate-label {
-            display: block;
-            font-size: 12px;
-            color: #7f8c8d;
-            margin-bottom: 5px;
-        }
-
-        .rate-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #2c3e50;
-        }
-
-        .rate-value.requested {
-            color: #f39c12;
-        }
-
-        .rate-arrow {
-            font-size: 24px;
-            color: #3498db;
-        }
-
-        .rate-increase {
-            background: #27ae60;
-            color: white;
-            padding: 5px 15px;
+        .schedule-status {
+            padding: 6px 12px;
             border-radius: 20px;
+            font-size: 12px;
             font-weight: 600;
         }
 
-        .justification {
-            margin-bottom: 15px;
+        .schedule-status.scheduled {
+            background: #e3f2fd;
+            color: #2196f3;
         }
 
-        .justification h4 {
-            font-size: 14px;
-            margin-bottom: 8px;
+        .schedule-status.off {
+            background: #f0f0f0;
+            color: #999;
         }
 
-        .justification p {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.5;
-        }
-
-        .request-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Reports Grid */
+        /* Reports Section */
         .reports-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -458,81 +982,286 @@
 
         .report-card {
             background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .report-card h3 {
-            margin-bottom: 15px;
-            color: #2c3e50;
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .report-icon {
+            width: 60px;
+            height: 60px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .report-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .report-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
         }
 
         .report-stats {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            gap: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
         }
 
-        .stat {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        .stat-label {
-            color: #7f8c8d;
-            font-size: 14px;
+        .report-stat {
+            flex: 1;
+            text-align: center;
         }
 
         .stat-value {
-            font-weight: 600;
-            color: #2c3e50;
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
         }
 
-        /* Settings Grid */
-        .settings-grid {
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        /* Admin Dashboard */
+        .admin-stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
+            margin-bottom: 30px;
         }
 
-        .settings-card {
+        .stat-card {
             background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
         }
 
-        .settings-card h3 {
-            margin-bottom: 20px;
-            color: #2c3e50;
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
-        .setting-item {
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 15px;
         }
 
-        .setting-item label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
+        .stat-card-title {
             font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
         }
 
-        .setting-item input[type="number"],
-        .setting-item input[type="email"],
-        .setting-item select {
+        .stat-card-icon {
+            width: 40px;
+            height: 40px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stat-card-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .stat-card-change {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-card-change.positive {
+            color: #27ae60;
+        }
+
+        .stat-card-change.negative {
+            color: #ff4757;
+        }
+
+        /* Employee Table */
+        .employee-table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .table-search {
+            padding: 8px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 250px;
+        }
+
+        .export-btn {
+            padding: 8px 16px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        .employee-table {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
 
-        .setting-item input[type="checkbox"] {
-            margin-right: 8px;
+        .employee-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .employee-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .employee-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .employee-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .employee-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .employee-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .employee-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .employee-id {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.clocked-in {
+            background: #d4f8d4;
+            color: #27ae60;
+        }
+
+        .status-badge.clocked-out {
+            background: #ffe0e0;
+            color: #ff4757;
+        }
+
+        .status-badge.on-break {
+            background: #fff3cd;
+            color: #f39c12;
+        }
+
+        .status-badge.late {
+            background: #ffe0e0;
+            color: #ff4757;
+        }
+
+        .status-badge.on-time {
+            background: #d4f8d4;
+            color: #27ae60;
+        }
+
+        .status-badge.absent {
+            background: #e0e0e0;
+            color: #666;
         }
 
         /* Modal Styles */
@@ -542,82 +1271,133 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
+            background: rgba(0,0,0,0.5);
+            display: none;
             align-items: center;
+            justify-content: center;
             z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
         }
 
         .modal-content {
             background: white;
-            border-radius: 10px;
-            max-width: 600px;
+            border-radius: 15px;
             width: 90%;
+            max-width: 600px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid #e0e0e0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid #ecf0f1;
         }
 
-        .modal-header h3 {
+        .modal-title {
             font-size: 20px;
-            color: #2c3e50;
+            font-weight: 600;
+            color: #333;
         }
 
         .modal-close {
-            background: none;
+            width: 32px;
+            height: 32px;
             border: none;
-            font-size: 24px;
+            background: #f0f0f0;
+            border-radius: 50%;
             cursor: pointer;
-            color: #7f8c8d;
-            width: 30px;
-            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .modal-close:hover {
-            background: #ecf0f1;
+            background: #e0e0e0;
+            transform: rotate(90deg);
         }
 
         .modal-body {
-            padding: 20px;
+            padding: 30px;
         }
 
-        /* Pay Request Form */
-        .pay-request-form {
-            padding: 10px;
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
         }
 
-        .current-rate-display {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+        }
+
+        .btn-danger {
+            background: #ff4757;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ff3838;
+        }
+
+        /* Form Styles */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
             margin-bottom: 20px;
-        }
-
-        .current-rate-display h3 {
-            font-size: 16px;
-            color: #7f8c8d;
-            margin-bottom: 10px;
-        }
-
-        .rate-amount {
-            font-size: 32px;
-            font-weight: 700;
-            color: #27ae60;
         }
 
         .form-group {
@@ -628,131 +1408,55 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #2c3e50;
+            color: #333;
         }
 
-        .form-group input,
-        .form-group textarea {
+        .form-control {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 14px;
+            transition: border-color 0.3s ease;
         }
 
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
         }
 
-        .rate-comparison-preview {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 20px;
+        .form-control.error {
+            border-color: #ff4757;
         }
 
-        .rate-preview-item {
-            text-align: center;
-        }
-
-        .rate-preview-label {
+        .error-message {
+            color: #ff4757;
             font-size: 12px;
-            color: #7f8c8d;
-            margin-bottom: 5px;
+            margin-top: 5px;
         }
 
-        .rate-preview-value {
-            font-size: 20px;
-            font-weight: 700;
-            color: #2c3e50;
-        }
-
-        .rate-preview-value.new {
-            color: #f39c12;
-        }
-
-        .increase-preview {
-            background: #27ae60;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        .justification-tips {
-            background: #e3f2fd;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .justification-tips h5 {
-            margin-bottom: 10px;
-            color: #1565c0;
-        }
-
-        .justification-tips ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .justification-tips li {
-            padding: 5px 0;
-            padding-left: 20px;
-            position: relative;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .justification-tips li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #1565c0;
-            font-weight: 700;
-        }
-
-        .attachment-area {
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .attachment-area:hover {
-            border-color: #3498db;
-            background: #f8f9fa;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 20px;
-        }
-
-        /* Break Reminder */
-        .break-reminder-notification {
+        /* Success Message */
+        .success-message {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            max-width: 400px;
-            z-index: 1001;
-            animation: slideIn 0.3s ease;
+            background: #27ae60;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 0.3s ease;
+            z-index: 1100;
         }
 
-        @keyframes slideIn {
+        .success-message.active {
+            display: flex;
+        }
+
+        @keyframes slideInRight {
             from {
                 transform: translateX(100%);
             }
@@ -761,587 +1465,1904 @@
             }
         }
 
-        .break-reminder-content {
-            display: flex;
-            gap: 15px;
+        /* Pay Rate Request Styles */
+        .pay-rate-request-card {
+            background: #fffbf0;
+            border: 2px solid #f39c12;
+            border-radius: 12px;
+            padding: 20px;
             margin-bottom: 15px;
         }
 
-        .break-icon {
-            font-size: 48px;
-        }
-
-        .break-text h4 {
-            margin-bottom: 5px;
-            color: #2c3e50;
-        }
-
-        .break-text p {
-            font-size: 14px;
-            color: #7f8c8d;
-        }
-
-        .break-actions {
+        .request-header {
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
 
-        .break-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .request-employee {
+            font-weight: 600;
+            color: #333;
         }
 
-        .break-btn.take-break {
-            background: #27ae60;
-            color: white;
+        .request-date {
+            font-size: 12px;
+            color: #999;
         }
 
-        .break-btn.take-break:hover {
-            background: #229954;
+        .request-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 15px;
         }
 
-        .break-btn.dismiss {
-            background: #ecf0f1;
-            color: #2c3e50;
-        }
-
-        .break-btn.dismiss:hover {
-            background: #bdc3c7;
-        }
-
-        .break-timer {
-            background: #e8f5e9;
-            border-radius: 10px;
-            padding: 30px;
-            margin-bottom: 20px;
+        .request-detail {
             text-align: center;
         }
 
-        /* Messages */
-        .message {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 15px 25px;
-            border-radius: 5px;
-            font-weight: 500;
-            z-index: 1002;
-            animation: messageSlide 0.3s ease;
+        .request-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
         }
 
-        @keyframes messageSlide {
-            from {
-                transform: translateX(-50%) translateY(-100%);
-            }
+        .request-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .request-value.current {
+            color: #666;
+        }
+
+        .request-value.requested {
+            color: #f39c12;
+        }
+
+        .request-value.increase {
+            color: #27ae60;
+        }
+
+        .request-justification {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f0f0f0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
             to {
-                transform: translateX(-50%) translateY(0);
+                transform: rotate(360deg);
             }
         }
 
-        .message.success {
-            background: #27ae60;
-            color: white;
-        }
-
-        .message.error {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .message.warning {
-            background: #f39c12;
-            color: white;
-        }
-
-        .message.info {
-            background: #3498db;
-            color: white;
-        }
-
-        /* Responsive */
+        /* Responsive Design */
         @media (max-width: 768px) {
+            .login-methods {
+                grid-template-columns: 1fr;
+            }
+
             .header-content {
                 flex-direction: column;
                 gap: 15px;
             }
 
-            .admin-nav {
-                flex-direction: column;
+            .nav-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
-            .admin-nav-btn {
+            .time-clock-container {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .employee-table-container {
+                padding: 15px;
+            }
+
+            .table-search {
                 width: 100%;
-            }
-
-            .payroll-summary {
-                grid-template-columns: 1fr;
-            }
-
-            .employee-management-grid,
-            .reports-grid,
-            .settings-grid {
-                grid-template-columns: 1fr;
             }
 
             .modal-content {
                 width: 95%;
                 margin: 10px;
             }
-
-            .rate-comparison {
-                flex-direction: column;
-            }
-
-            .request-actions {
-                flex-direction: column;
-            }
-
-            .request-actions button {
-                width: 100%;
-            }
         }
 
-        /* No data message */
-        .no-requests {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
-            font-style: italic;
+        /* Print Styles */
+        @media print {
+            .header, .nav-container, .add-entry-btn, .export-btn, .modal-overlay {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .main-content {
+                padding: 0;
+            }
+
+            .card, .time-entry-card {
+                box-shadow: none;
+                border: 1px solid #e0e0e0;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-content">
-            <div class="spinner"></div>
-            <h2>Loading MRE Timesheet System...</h2>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo">🕐</div>
+            <h1 class="login-title">MRE Timesheet System</h1>
+            
+            <div class="login-methods">
+                <div class="login-method active" onclick="selectLoginMethod('pin')">
+                    <div class="login-method-icon">🔢</div>
+                    <div class="login-method-name">PIN Login</div>
+                </div>
+                <div class="login-method" onclick="selectLoginMethod('biometric')">
+                    <div class="login-method-icon">👆</div>
+                    <div class="login-method-name">Biometric</div>
+                </div>
+                <div class="login-method" onclick="selectLoginMethod('qr')">
+                    <div class="login-method-icon">📱</div>
+                    <div class="login-method-name">QR Code</div>
+                </div>
+                <div class="login-method" onclick="selectLoginMethod('admin')">
+                    <div class="login-method-icon">🔐</div>
+                    <div class="login-method-name">Admin Key</div>
+                </div>
+            </div>
+
+            <!-- PIN Login Form -->
+            <div class="login-form active" id="pinForm">
+                <div class="form-group">
+                    <label>Employee</label>
+                    <select id="employeeSelect" onchange="checkEmployeePhoto()">
+                        <option value="">Select Employee...</option>
+                        <option value="1">Rachael (Salary/Admin)</option>
+                        <option value="2">Brad (Salary/Admin)</option>
+                        <option value="3">Cherish (Hourly/Admin)</option>
+                        <option value="4">Logan (Hourly/Admin)</option>
+                        <option value="5">Anastosia (Hourly)</option>
+                        <option value="6">Bryce (Hourly)</option>
+                        <option value="7">Ben (Hourly)</option>
+                    </select>
+                </div>
+                <img id="employeePhoto" class="employee-photo-confirm" style="display: none;">
+                <div class="form-group">
+                    <label>Enter 4-Digit PIN</label>
+                    <div class="pin-input-container">
+                        <input type="password" class="pin-digit" maxlength="1" onkeyup="handlePinInput(this, 0)">
+                        <input type="password" class="pin-digit" maxlength="1" onkeyup="handlePinInput(this, 1)">
+                        <input type="password" class="pin-digit" maxlength="1" onkeyup="handlePinInput(this, 2)">
+                        <input type="password" class="pin-digit" maxlength="1" onkeyup="handlePinInput(this, 3)">
+                    </div>
+                </div>
+                <button class="login-btn" onclick="loginWithPin()">Login</button>
+            </div>
+
+            <!-- Biometric Login Form -->
+            <div class="login-form" id="biometricForm">
+                <div class="biometric-container">
+                    <div class="fingerprint-scanner" onclick="simulateBiometric()">
+                        <div class="scan-line"></div>
+                    </div>
+                    <p>Place your finger on the scanner</p>
+                </div>
+            </div>
+
+            <!-- QR Code Login Form -->
+            <div class="login-form" id="qrForm">
+                <div class="qr-scanner">
+                    <div class="qr-icon">📷</div>
+                    <p>Scan your personal QR code</p>
+                    <button class="login-btn" onclick="simulateQRScan()">Simulate QR Scan</button>
+                </div>
+            </div>
+
+            <!-- Admin Override Form -->
+            <div class="login-form" id="adminForm">
+                <div class="form-group">
+                    <label>Admin Username</label>
+                    <input type="text" class="form-control" id="adminUsername">
+                </div>
+                <div class="form-group">
+                    <label>Admin Password</label>
+                    <input type="password" class="form-control" id="adminPassword">
+                </div>
+                <div class="form-group">
+                    <label>Employee to Override</label>
+                    <select class="form-control" id="overrideEmployee">
+                        <option value="">Select Employee...</option>
+                        <option value="1">Rachael</option>
+                        <option value="2">Brad</option>
+                        <option value="3">Cherish</option>
+                        <option value="4">Logan</option>
+                        <option value="5">Anastosia</option>
+                        <option value="6">Bryce</option>
+                        <option value="7">Ben</option>
+                    </select>
+                </div>
+                <button class="login-btn" onclick="adminOverrideLogin()">Admin Override Login</button>
+            </div>
         </div>
     </div>
 
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <h1 class="company-name">MRE Timesheet</h1>
-            <div class="header-actions">
-                <span id="currentUser"></span>
-                <button class="action-btn secondary" onclick="logout()">Logout</button>
+    <!-- Main Application -->
+    <div class="main-app" id="mainApp">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="company-logo">
+                        <span>🕐</span>
+                        <span>MRE Timesheet</span>
+                    </div>
+                </div>
+                <div class="user-info">
+                    <img id="userPhoto" class="user-photo" src="">
+                    <div class="user-details">
+                        <div class="user-name" id="userName"></div>
+                        <div class="user-role" id="userRole"></div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- Main Container -->
-    <div class="container">
-        <!-- Admin Navigation -->
-        <nav class="admin-nav">
-            <button class="admin-nav-btn active" onclick="showEmployeeManagement()">👥 Employees</button>
-            <button class="admin-nav-btn" onclick="showPayrollDashboard()">💰 Payroll</button>
-            <button class="admin-nav-btn" onclick="showReports()">📊 Reports</button>
-            <button class="admin-nav-btn" onclick="showSystemSettings()">⚙️ Settings</button>
+        <!-- Navigation -->
+        <nav class="nav-container">
+            <div class="nav-content">
+                <div class="nav-tabs" id="navTabs">
+                    <!-- Navigation tabs will be populated based on user role -->
+                </div>
+            </div>
         </nav>
 
-        <!-- Admin Content Area -->
-        <div id="adminContent" class="main-content">
-            <!-- Content will be dynamically loaded here -->
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Time Clock Section -->
+            <div class="content-section" id="timeClockSection">
+                <div class="time-clock-container">
+                    <div class="clock-card">
+                        <div class="current-time" id="currentTime"></div>
+                        <div class="current-date" id="currentDate"></div>
+                        <div class="clock-status" id="clockStatus">Clocked Out</div>
+                        <div class="clock-buttons">
+                            <button class="clock-btn clock-in" id="clockInBtn" onclick="clockIn()">
+                                <span>🟢</span>
+                                <span>Clock In</span>
+                            </button>
+                            <button class="clock-btn clock-out" id="clockOutBtn" onclick="clockOut()" disabled>
+                                <span>🔴</span>
+                                <span>Clock Out</span>
+                            </button>
+                            <button class="clock-btn lunch" id="lunchBtn" onclick="toggleLunch()" disabled>
+                                <span>🍽️</span>
+                                <span id="lunchBtnText">Start Lunch</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="time-summary">
+                        <h3 class="summary-title">Today's Summary</h3>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="summary-label">Total Hours</div>
+                                <div class="summary-value" id="totalHours">0.00</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">Active Time</div>
+                                <div class="summary-value" id="activeTime">0.00</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">Idle Time</div>
+                                <div class="summary-value idle" id="idleTime">0.00</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">Today's Earnings</div>
+                                <div class="summary-value earnings" id="todayEarnings">$0.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Monitor -->
+                <div class="activity-monitor">
+                    <div class="activity-header">
+                        <div class="activity-title">
+                            <span>📊</span>
+                            <span>Activity Monitor</span>
+                        </div>
+                        <div class="activity-status">
+                            <div class="status-indicator" id="activityIndicator"></div>
+                            <span id="activityStatus">Inactive</span>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-metrics">
+                        <div class="activity-metric">
+                            <div class="metric-info">
+                                <div class="metric-icon">🖱️</div>
+                                <div>
+                                    <div class="metric-label">Mouse Activity</div>
+                                    <div class="metric-value" id="mouseActivity">0</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="activity-metric">
+                            <div class="metric-info">
+                                <div class="metric-icon">⌨️</div>
+                                <div>
+                                    <div class="metric-label">Keyboard Activity</div>
+                                    <div class="metric-value" id="keyboardActivity">0</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="activity-metric">
+                            <div class="metric-info">
+                                <div class="metric-icon">⏱️</div>
+                                <div>
+                                    <div class="metric-label">Idle Since</div>
+                                    <div class="metric-value" id="idleSince">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="productivity-score">
+                        <div class="score-title">Productivity Score</div>
+                        <div class="score-value" id="productivityScore">0%</div>
+                        <div class="score-bar">
+                            <div class="score-fill" id="scoreFill" style="width: 0%"></div>
+                        </div>
+                        <div class="score-message" id="scoreMessage">Start working to build your score</div>
+                    </div>
+                </div>
+
+                <!-- Project Time Entry -->
+                <div class="time-entry-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Project Time Entries</h3>
+                        <button class="add-entry-btn" onclick="showAddTimeEntry()">
+                            <span>➕</span>
+                            <span>Add Entry</span>
+                        </button>
+                    </div>
+                    
+                    <div class="time-entries-grid" id="timeEntriesGrid">
+                        <!-- Time entries will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schedule Section -->
+            <div class="content-section" id="scheduleSection">
+                <div class="schedule-container">
+                    <div class="schedule-header">
+                        <h2 class="schedule-title">Weekly Schedule</h2>
+                    </div>
+                    <div class="schedule-grid" id="scheduleGrid">
+                        <!-- Schedule will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div class="content-section" id="reportsSection">
+                <div class="reports-grid">
+                    <div class="report-card" onclick="generateReport('attendance')">
+                        <div class="report-icon">📊</div>
+                        <h3 class="report-title">Attendance Report</h3>
+                        <p class="report-description">View attendance patterns, late arrivals, and absence history</p>
+                        <div class="report-stats">
+                            <div class="report-stat">
+                                <div class="stat-value">92%</div>
+                                <div class="stat-label">On-Time</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Late Days</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="stat-value">1</div>
+                                <div class="stat-label">Absences</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="report-card" onclick="generateReport('productivity')">
+                        <div class="report-icon">📈</div>
+                        <h3 class="report-title">Productivity Analysis</h3>
+                        <p class="report-description">Analyze active time, idle periods, and productivity trends</p>
+                        <div class="report-stats">
+                            <div class="report-stat">
+                                <div class="stat-value">87%</div>
+                                <div class="stat-label">Active Time</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="stat-value">6.5h</div>
+                                <div class="stat-label">Avg Daily</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="stat-value">13%</div>
+                                <div class="stat-label">Idle Time</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="report-card" onclick="generateReport('payroll')">
+                        <div class="report-icon">💰</div>
+                        <h3 class="report-title">Payroll Summary</h3>
+                        <p class="report-description">Review hours worked, overtime, and earnings calculations</p>
+                        <div class="report-stats">
+                            <div class="report-stat">
+                                <div class="stat-value">38.5</div>
+                                <div class="stat-label">Hours/Week</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="stat-value">$673</div>
+                                <div class="stat-label">This Week</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="stat-value">2.5</div>
+                                <div class="stat-label">OT Hours</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="report-card" onclick="exportADP()">
+                        <div class="report-icon">📤</div>
+                        <h3 class="report-title">ADP Export</h3>
+                        <p class="report-description">Export timesheet data in ADP-compatible format</p>
+                        <div class="report-stats">
+                            <div class="report-stat">
+                                <div class="stat-value">Ready</div>
+                                <div class="stat-label">Status</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="stat-value">CSV</div>
+                                <div class="stat-label">Format</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="stat-value">All</div>
+                                <div class="stat-label">Employees</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Dashboard Section -->
+            <div class="content-section" id="adminSection">
+                <div class="admin-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-title">Active Employees</div>
+                            <div class="stat-card-icon">👥</div>
+                        </div>
+                        <div class="stat-card-value" id="activeEmployeeCount">5</div>
+                        <div class="stat-card-change positive">
+                            <span>↑</span>
+                            <span>2 clocked in today</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-title">Total Hours Today</div>
+                            <div class="stat-card-icon">⏰</div>
+                        </div>
+                        <div class="stat-card-value" id="totalHoursToday">42.5</div>
+                        <div class="stat-card-change positive">
+                            <span>↑</span>
+                            <span>On track</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-title">Labor Cost Today</div>
+                            <div class="stat-card-icon">💵</div>
+                        </div>
+                        <div class="stat-card-value" id="laborCostToday">$892</div>
+                        <div class="stat-card-change negative">
+                            <span>↑</span>
+                            <span>5% over budget</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-title">Pending Requests</div>
+                            <div class="stat-card-icon">📝</div>
+                        </div>
+                        <div class="stat-card-value" id="pendingRequests">3</div>
+                        <div class="stat-card-change">
+                            <span>•</span>
+                            <span>Awaiting approval</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Employee Table -->
+                <div class="employee-table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Employee Overview</h3>
+                        <div class="table-actions">
+                            <input type="text" class="table-search" placeholder="Search employees..." onkeyup="searchEmployees(this.value)">
+                            <button class="export-btn" onclick="exportEmployeeData()">
+                                <span>📊</span>
+                                <span>Export</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table class="employee-table">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Hours Today</th>
+                                <th>This Week</th>
+                                <th>Rate</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeTableBody">
+                            <!-- Employee rows will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pay Rate Requests -->
+                <div class="employee-table-container" style="margin-top: 20px;">
+                    <div class="table-header">
+                        <h3 class="table-title">Pay Rate Requests</h3>
+                    </div>
+                    <div id="payRateRequests">
+                        <!-- Pay rate requests will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="content-section" id="settingsSection">
+                <div class="schedule-container">
+                    <h2 class="schedule-title">Settings & Preferences</h2>
+                    <!-- Settings content would go here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Modal Title</h3>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be populated here -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <!-- Modal footer buttons will be populated here -->
+            </div>
         </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        <span>✓</span>
+        <span id="successText">Success!</span>
     </div>
 
     <script>
-        // Global state management
-        const enterpriseState = {
-            currentUser: 'Admin',
-            currentEmployee: null,
-            currentProject: null,
+        // Global state
+        const state = {
+            currentUser: null,
             clockedIn: false,
             onLunch: false,
-            employees: {
-                1: {
-                    id: 1,
-                    empId: 'EMP001',
-                    name: 'John Smith',
-                    type: 'hourly',
-                    payRate: 15.00,
-                    adminAccess: false,
-                    photo: 'https://i.pravatar.cc/150?img=1'
-                },
-                2: {
-                    id: 2,
-                    empId: 'EMP002',
-                    name: 'Sarah Johnson',
-                    type: 'hourly',
-                    payRate: 18.50,
-                    adminAccess: false,
-                    photo: 'https://i.pravatar.cc/150?img=2'
-                },
-                3: {
-                    id: 3,
-                    empId: 'EMP003',
-                    name: 'Mike Davis',
-                    type: 'salary',
-                    adminAccess: true,
-                    photo: 'https://i.pravatar.cc/150?img=3'
-                },
-                4: {
-                    id: 4,
-                    empId: 'EMP004',
-                    name: 'Emily Wilson',
-                    type: 'hourly',
-                    payRate: 22.00,
-                    adminAccess: false,
-                    photo: 'https://i.pravatar.cc/150?img=4'
-                }
-            },
-            projects: [
-                { id: 1, name: 'Website Redesign', client: 'ABC Corp', color: '#3498db' },
-                { id: 2, name: 'Mobile App', client: 'XYZ Inc', color: '#27ae60' },
-                { id: 3, name: 'Database Migration', client: 'Tech Solutions', color: '#e74c3c' }
-            ],
-            payRateRequests: []
+            clockInTime: null,
+            lunchStartTime: null,
+            totalLunchTime: 0,
+            activeTime: 0,
+            idleTime: 0,
+            lastActivityTime: Date.now(),
+            mouseActivity: 0,
+            keyboardActivity: 0,
+            productivityScore: 0,
+            timeEntries: [],
+            loginAttempts: 0,
+            maxLoginAttempts: 3,
+            idleThreshold: 5 * 60 * 1000, // 5 minutes
+            currentDate: new Date()
         };
 
-        // Utility Functions
-        function showMessage(text, type = 'info') {
-            const existingMessage = document.querySelector('.message');
-            if (existingMessage) {
-                existingMessage.remove();
+        // Employee data
+        const employees = {
+            1: {
+                id: 1,
+                name: 'Rachael',
+                type: 'salary',
+                isAdmin: true,
+                pin: '1234',
+                photo: 'https://i.pravatar.cc/150?img=1',
+                schedule: { start: '08:00', end: '17:00', lunch: 60 },
+                payRate: 0, // Salary employees don't have hourly rate
+                requiresTimesheet: false
+            },
+            2: {
+                id: 2,
+                name: 'Brad',
+                type: 'salary',
+                isAdmin: true,
+                pin: '2345',
+                photo: 'https://i.pravatar.cc/150?img=2',
+                schedule: { start: '08:00', end: '17:00', lunch: 60 },
+                payRate: 0,
+                requiresTimesheet: false
+            },
+            3: {
+                id: 3,
+                name: 'Cherish',
+                type: 'hourly',
+                isAdmin: true,
+                pin: '3456',
+                photo: 'https://i.pravatar.cc/150?img=3',
+                schedule: { start: '08:00', end: '17:00', lunch: 30 },
+                payRate: 23.55,
+                requiresTimesheet: true
+            },
+            4: {
+                id: 4,
+                name: 'Logan',
+                type: 'hourly',
+                isAdmin: true,
+                pin: '4567',
+                photo: 'https://i.pravatar.cc/150?img=4',
+                schedule: { start: '08:00', end: '17:00', lunch: 30 },
+                payRate: 23.55,
+                futureRate: { rate: 28.55, effectiveDate: new Date('2025-06-02') },
+                requiresTimesheet: true
+            },
+            5: {
+                id: 5,
+                name: 'Anastosia',
+                type: 'hourly',
+                isAdmin: false,
+                pin: '5678',
+                photo: 'https://i.pravatar.cc/150?img=5',
+                schedule: { start: '09:00', end: '17:00', lunch: 30 },
+                payRate: 17.50,
+                requiresTimesheet: true
+            },
+            6: {
+                id: 6,
+                name: 'Bryce',
+                type: 'hourly',
+                isAdmin: false,
+                pin: '6789',
+                photo: 'https://i.pravatar.cc/150?img=6',
+                schedule: { start: '09:00', end: '17:00', lunch: 30 },
+                payRate: 17.35,
+                requiresTimesheet: true
+            },
+            7: {
+                id: 7,
+                name: 'Ben',
+                type: 'hourly',
+                isAdmin: false,
+                pin: '7890',
+                photo: 'https://i.pravatar.cc/150?img=7',
+                schedule: { start: '09:00', end: '17:00', lunch: 30 },
+                payRate: 17.00,
+                requiresTimesheet: true
             }
+        };
 
-            const message = document.createElement('div');
-            message.className = `message ${type}`;
-            message.textContent = text;
-            document.body.appendChild(message);
+        // Sample time entries data
+        const sampleTimeEntries = [
+            { id: 1, employeeId: 5, date: new Date(), clockIn: '09:05', clockOut: null, lunch: 0, idle: 0, late: 5 },
+            { id: 2, employeeId: 6, date: new Date(), clockIn: '08:58', clockOut: null, lunch: 0, idle: 0, late: 0 },
+            { id: 3, employeeId: 7, date: new Date(), clockIn: null, clockOut: null, lunch: 0, idle: 0, absent: true }
+        ];
 
-            setTimeout(() => {
-                if (document.body.contains(message)) {
-                    message.remove();
-                }
-            }, 3000);
+        // Projects data
+        const projects = [
+            { id: 1, name: 'Website Redesign', color: '#667eea' },
+            { id: 2, name: 'Mobile App Development', color: '#27ae60' },
+            { id: 3, name: 'Database Migration', color: '#ff4757' },
+            { id: 4, name: 'Customer Support', color: '#f39c12' },
+            { id: 5, name: 'Internal Training', color: '#3498db' }
+        ];
+
+        // Pay rate requests
+        const payRateRequests = [
+            {
+                id: 1,
+                employeeId: 5,
+                currentRate: 17.50,
+                requestedRate: 19.50,
+                justification: "I have successfully completed my probation period and have taken on additional responsibilities including training new team members and managing inventory systems.",
+                submittedDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+                status: 'pending'
+            }
+        ];
+
+        // Initialize application
+        function init() {
+            updateClock();
+            setInterval(updateClock, 1000);
+            setupActivityMonitoring();
+            
+            // Check for automatic pay rate increases
+            checkPayRateIncreases();
         }
 
-        function showLoading(show) {
-            const loadingScreen = document.getElementById('loadingScreen');
-            if (loadingScreen) {
-                if (show) {
-                    loadingScreen.classList.remove('hidden');
+        // Login Methods
+        function selectLoginMethod(method) {
+            document.querySelectorAll('.login-method').forEach(m => m.classList.remove('active'));
+            document.querySelectorAll('.login-form').forEach(f => f.classList.remove('active'));
+            
+            document.querySelector(`.login-method:nth-child(${['pin', 'biometric', 'qr', 'admin'].indexOf(method) + 1})`).classList.add('active');
+            document.getElementById(`${method}Form`).classList.add('active');
+        }
+
+        function checkEmployeePhoto() {
+            const select = document.getElementById('employeeSelect');
+            const photo = document.getElementById('employeePhoto');
+            
+            if (select.value) {
+                const employee = employees[select.value];
+                photo.src = employee.photo;
+                photo.style.display = 'block';
+            } else {
+                photo.style.display = 'none';
+            }
+        }
+
+        function handlePinInput(input, index) {
+            if (input.value) {
+                input.classList.add('filled');
+                if (index < 3) {
+                    document.querySelectorAll('.pin-digit')[index + 1].focus();
+                }
+            } else {
+                input.classList.remove('filled');
+            }
+            
+            // Auto-submit when all digits are entered
+            const pins = Array.from(document.querySelectorAll('.pin-digit')).map(p => p.value);
+            if (pins.every(p => p)) {
+                loginWithPin();
+            }
+        }
+
+        function loginWithPin() {
+            const employeeId = document.getElementById('employeeSelect').value;
+            const pins = Array.from(document.querySelectorAll('.pin-digit')).map(p => p.value).join('');
+            
+            if (!employeeId) {
+                showError('Please select an employee');
+                return;
+            }
+            
+            const employee = employees[employeeId];
+            if (employee.pin === pins) {
+                loginSuccess(employee);
+            } else {
+                state.loginAttempts++;
+                if (state.loginAttempts >= state.maxLoginAttempts) {
+                    showError('Maximum login attempts exceeded. Please contact administrator.');
+                    document.querySelectorAll('.pin-digit').forEach(p => p.disabled = true);
                 } else {
-                    loadingScreen.classList.add('hidden');
-                    // Completely remove after transition
-                    setTimeout(() => {
-                        if (loadingScreen.classList.contains('hidden')) {
-                            loadingScreen.style.display = 'none';
-                        }
-                    }, 300);
+                    showError(`Invalid PIN. ${state.maxLoginAttempts - state.loginAttempts} attempts remaining.`);
+                    document.querySelectorAll('.pin-digit').forEach(p => {
+                        p.value = '';
+                        p.classList.remove('filled');
+                    });
+                    document.querySelectorAll('.pin-digit')[0].focus();
                 }
             }
         }
 
-        function getCurrentPayRate(employee) {
-            if (employee.type !== 'hourly') return 0;
+        function simulateBiometric() {
+            showSuccess('Fingerprint recognized!');
+            setTimeout(() => {
+                // Simulate recognizing Cherish
+                loginSuccess(employees[3]);
+            }, 2000);
+        }
+
+        function simulateQRScan() {
+            showSuccess('QR Code scanned!');
+            setTimeout(() => {
+                // Simulate recognizing Logan
+                loginSuccess(employees[4]);
+            }, 1500);
+        }
+
+        function adminOverrideLogin() {
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            const employeeId = document.getElementById('overrideEmployee').value;
             
-            if (employee.payRateChanges && employee.payRateChanges.length > 0) {
-                const latestChange = employee.payRateChanges[employee.payRateChanges.length - 1];
-                return parseFloat(latestChange.newRate);
+            if (username === 'admin' && password === 'admin123' && employeeId) {
+                loginSuccess(employees[employeeId]);
+            } else {
+                showError('Invalid admin credentials or no employee selected');
+            }
+        }
+
+        function loginSuccess(employee) {
+            state.currentUser = employee;
+            state.loginAttempts = 0;
+            
+            // Update UI with user info
+            document.getElementById('userPhoto').src = employee.photo;
+            document.getElementById('userName').textContent = employee.name;
+            document.getElementById('userRole').textContent = `${employee.type.charAt(0).toUpperCase() + employee.type.slice(1)} ${employee.isAdmin ? '• Admin' : ''}`;
+            
+            // Setup navigation based on role
+            setupNavigation(employee);
+            
+            // Hide login screen and show main app
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').classList.add('active');
+            
+            // Show default section
+            if (employee.requiresTimesheet) {
+                showSection('timeClockSection');
+            } else {
+                showSection('adminSection');
             }
             
-            return parseFloat(employee.payRate) || 0;
-        }
-
-        function calculateEmployeeStats(employee) {
-            // Mock calculation - in real implementation would calculate from timesheet data
-            const hoursWorked = Math.floor(Math.random() * 10 + 35);
-            const pay = employee.type === 'hourly' 
-                ? (hoursWorked * getCurrentPayRate(employee)).toFixed(2)
-                : '2000.00';
-            
-            return {
-                hours: hoursWorked,
-                pay: pay
-            };
-        }
-
-        function getCurrentPeriodDates() {
-            const now = new Date();
-            const start = new Date(now);
-            start.setDate(start.getDate() - start.getDay());
-            const end = new Date(start);
-            end.setDate(end.getDate() + 6);
-            
-            return { start, end };
-        }
-
-        function updateNotification(message, type) {
-            showMessage(message, type);
-        }
-
-        function logTimeEvent(eventType, time, details = {}) {
-            console.log(`Time Event: ${eventType}`, { time, details });
+            showSuccess(`Welcome back, ${employee.name}!`);
         }
 
         function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                showMessage('Logged out successfully', 'success');
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
+            if (state.clockedIn) {
+                if (!confirm('You are still clocked in. Are you sure you want to logout?')) {
+                    return;
+                }
+            }
+            
+            // Reset state
+            state.currentUser = null;
+            state.clockedIn = false;
+            state.onLunch = false;
+            state.clockInTime = null;
+            state.lunchStartTime = null;
+            state.totalLunchTime = 0;
+            state.activeTime = 0;
+            state.idleTime = 0;
+            
+            // Reset UI
+            document.getElementById('mainApp').classList.remove('active');
+            document.getElementById('loginScreen').style.display = 'flex';
+            
+            // Clear PIN inputs
+            document.querySelectorAll('.pin-digit').forEach(p => {
+                p.value = '';
+                p.classList.remove('filled');
+                p.disabled = false;
+            });
+            
+            document.getElementById('employeeSelect').value = '';
+            document.getElementById('employeePhoto').style.display = 'none';
+        }
+
+        // Navigation Setup
+        function setupNavigation(employee) {
+            const navTabs = document.getElementById('navTabs');
+            navTabs.innerHTML = '';
+            
+            if (employee.requiresTimesheet) {
+                navTabs.innerHTML += `
+                    <button class="nav-tab active" onclick="showSection('timeClockSection')">
+                        <span class="nav-tab-icon">🕐</span>
+                        <span>Time Clock</span>
+                    </button>
+                    <button class="nav-tab" onclick="showSection('scheduleSection')">
+                        <span class="nav-tab-icon">📅</span>
+                        <span>Schedule</span>
+                    </button>
+                    <button class="nav-tab" onclick="showSection('reportsSection')">
+                        <span class="nav-tab-icon">📊</span>
+                        <span>Reports</span>
+                    </button>
+                `;
+            }
+            
+            if (employee.isAdmin) {
+                navTabs.innerHTML += `
+                    <button class="nav-tab ${!employee.requiresTimesheet ? 'active' : ''}" onclick="showSection('adminSection')">
+                        <span class="nav-tab-icon">👥</span>
+                        <span>Admin Dashboard</span>
+                    </button>
+                `;
+            }
+            
+            navTabs.innerHTML += `
+                <button class="nav-tab" onclick="showSection('settingsSection')">
+                    <span class="nav-tab-icon">⚙️</span>
+                    <span>Settings</span>
+                </button>
+            `;
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update nav tabs
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Load section-specific data
+            if (sectionId === 'adminSection') {
+                loadAdminDashboard();
+            } else if (sectionId === 'scheduleSection') {
+                loadSchedule();
             }
         }
 
+        // Clock Functions
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+            const dateStr = now.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            const currentTimeEl = document.getElementById('currentTime');
+            const currentDateEl = document.getElementById('currentDate');
+            
+            if (currentTimeEl) currentTimeEl.textContent = timeStr;
+            if (currentDateEl) currentDateEl.textContent = dateStr;
+            
+            // Update time calculations if clocked in
+            if (state.clockedIn) {
+                updateTimeCalculations();
+            }
+        }
+
+        function clockIn() {
+            state.clockedIn = true;
+            state.clockInTime = new Date();
+            
+            // Check if late
+            const employee = state.currentUser;
+            const scheduledStart = new Date();
+            const [hours, minutes] = employee.schedule.start.split(':');
+            scheduledStart.setHours(parseInt(hours), parseInt(minutes), 0);
+            
+            const lateMinutes = Math.max(0, Math.floor((state.clockInTime - scheduledStart) / 60000));
+            
+            // Update UI
+            document.getElementById('clockStatus').textContent = 'Clocked In';
+            document.getElementById('clockStatus').className = 'clock-status clocked-in';
+            document.getElementById('clockInBtn').disabled = true;
+            document.getElementById('clockOutBtn').disabled = false;
+            document.getElementById('lunchBtn').disabled = false;
+            
+            // Start activity monitoring
+            state.lastActivityTime = Date.now();
+            
+            showSuccess(lateMinutes > 0 ? 
+                `Clocked in ${lateMinutes} minutes late` : 
+                'Successfully clocked in!');
+        }
+
+        function clockOut() {
+            if (!confirm('Are you sure you want to clock out?')) {
+                return;
+            }
+            
+            state.clockedIn = false;
+            const clockOutTime = new Date();
+            const totalTime = clockOutTime - state.clockInTime;
+            
+            // Save time entry
+            const entry = {
+                date: new Date(),
+                clockIn: state.clockInTime,
+                clockOut: clockOutTime,
+                totalTime: totalTime,
+                lunchTime: state.totalLunchTime,
+                activeTime: state.activeTime,
+                idleTime: state.idleTime,
+                productivityScore: state.productivityScore
+            };
+            
+            state.timeEntries.push(entry);
+            
+            // Reset state
+            state.clockInTime = null;
+            state.lunchStartTime = null;
+            state.totalLunchTime = 0;
+            state.activeTime = 0;
+            state.idleTime = 0;
+            state.onLunch = false;
+            
+            // Update UI
+            document.getElementById('clockStatus').textContent = 'Clocked Out';
+            document.getElementById('clockStatus').className = 'clock-status clocked-out';
+            document.getElementById('clockInBtn').disabled = false;
+            document.getElementById('clockOutBtn').disabled = true;
+            document.getElementById('lunchBtn').disabled = true;
+            document.getElementById('lunchBtnText').textContent = 'Start Lunch';
+            
+            showSuccess('Successfully clocked out!');
+        }
+
+        function toggleLunch() {
+            if (state.onLunch) {
+                // End lunch
+                const lunchDuration = Date.now() - state.lunchStartTime;
+                state.totalLunchTime += lunchDuration;
+                state.onLunch = false;
+                state.lunchStartTime = null;
+                
+                document.getElementById('clockStatus').textContent = 'Clocked In';
+                document.getElementById('clockStatus').className = 'clock-status clocked-in';
+                document.getElementById('lunchBtnText').textContent = 'Start Lunch';
+                
+                showSuccess('Lunch break ended');
+            } else {
+                // Start lunch
+                state.onLunch = true;
+                state.lunchStartTime = Date.now();
+                
+                document.getElementById('clockStatus').textContent = 'On Lunch Break';
+                document.getElementById('clockStatus').className = 'clock-status on-break';
+                document.getElementById('lunchBtnText').textContent = 'End Lunch';
+                
+                showSuccess('Lunch break started');
+            }
+        }
+
+        // Time Calculations
+        function updateTimeCalculations() {
+            if (!state.clockedIn || !state.clockInTime) return;
+            
+            const now = Date.now();
+            const totalElapsed = now - state.clockInTime.getTime();
+            const workTime = totalElapsed - state.totalLunchTime - (state.onLunch ? now - state.lunchStartTime : 0);
+            
+            // Calculate hours
+            const hours = workTime / (1000 * 60 * 60);
+            document.getElementById('totalHours').textContent = hours.toFixed(2);
+            
+            // Calculate active time (excluding current idle period if any)
+            const currentIdleDuration = now - state.lastActivityTime;
+            const isCurrentlyIdle = currentIdleDuration > state.idleThreshold;
+            
+            if (isCurrentlyIdle) {
+                const activeHours = (state.activeTime + (state.lastActivityTime - state.clockInTime.getTime() - state.totalLunchTime - state.idleTime)) / (1000 * 60 * 60);
+                document.getElementById('activeTime').textContent = Math.max(0, activeHours).toFixed(2);
+                
+                const idleHours = (state.idleTime + currentIdleDuration) / (1000 * 60 * 60);
+                document.getElementById('idleTime').textContent = idleHours.toFixed(2);
+            } else {
+                const activeHours = (workTime - state.idleTime) / (1000 * 60 * 60);
+                document.getElementById('activeTime').textContent = Math.max(0, activeHours).toFixed(2);
+                
+                const idleHours = state.idleTime / (1000 * 60 * 60);
+                document.getElementById('idleTime').textContent = idleHours.toFixed(2);
+            }
+            
+            // Calculate earnings
+            if (state.currentUser.type === 'hourly') {
+                const rate = getCurrentPayRate(state.currentUser);
+                const regularHours = Math.min(hours, 8);
+                const overtimeHours = Math.max(0, hours - 8);
+                const earnings = (regularHours * rate) + (overtimeHours * rate * 1.5);
+                document.getElementById('todayEarnings').textContent = `$${earnings.toFixed(2)}`;
+            }
+            
+            // Update productivity score
+            updateProductivityScore();
+        }
+
+        // Get current pay rate (checking for future rate increases)
+        function getCurrentPayRate(employee) {
+            if (employee.futureRate && new Date() >= employee.futureRate.effectiveDate) {
+                return employee.futureRate.rate;
+            }
+            return employee.payRate;
+        }
+
+        // Activity Monitoring
+        function setupActivityMonitoring() {
+            // Mouse movement
+            let mouseTimer;
+            document.addEventListener('mousemove', () => {
+                if (!state.clockedIn || state.onLunch) return;
+                
+                clearTimeout(mouseTimer);
+                state.mouseActivity++;
+                state.lastActivityTime = Date.now();
+                updateActivityDisplay();
+                
+                mouseTimer = setTimeout(() => {
+                    state.mouseActivity = Math.max(0, state.mouseActivity - 1);
+                    updateActivityDisplay();
+                }, 5000);
+            });
+            
+            // Keyboard activity
+            let keyTimer;
+            document.addEventListener('keypress', () => {
+                if (!state.clockedIn || state.onLunch) return;
+                
+                clearTimeout(keyTimer);
+                state.keyboardActivity++;
+                state.lastActivityTime = Date.now();
+                updateActivityDisplay();
+                
+                keyTimer = setTimeout(() => {
+                    state.keyboardActivity = Math.max(0, state.keyboardActivity - 1);
+                    updateActivityDisplay();
+                }, 5000);
+            });
+            
+            // Check for idle time every second
+            setInterval(checkIdleTime, 1000);
+        }
+
+        function updateActivityDisplay() {
+            document.getElementById('mouseActivity').textContent = state.mouseActivity;
+            document.getElementById('keyboardActivity').textContent = state.keyboardActivity;
+            
+            const isActive = state.mouseActivity > 0 || state.keyboardActivity > 0;
+            const indicator = document.getElementById('activityIndicator');
+            const status = document.getElementById('activityStatus');
+            
+            if (indicator && status) {
+                if (isActive) {
+                    indicator.className = 'status-indicator active';
+                    status.textContent = 'Active';
+                } else if (Date.now() - state.lastActivityTime < state.idleThreshold) {
+                    indicator.className = 'status-indicator idle';
+                    status.textContent = 'Idle';
+                } else {
+                    indicator.className = 'status-indicator inactive';
+                    status.textContent = 'Inactive';
+                }
+            }
+        }
+
+        function checkIdleTime() {
+            if (!state.clockedIn || state.onLunch) return;
+            
+            const now = Date.now();
+            const timeSinceActivity = now - state.lastActivityTime;
+            
+            if (timeSinceActivity > state.idleThreshold) {
+                // Currently idle
+                const idleMinutes = Math.floor(timeSinceActivity / 60000);
+                const idleSeconds = Math.floor((timeSinceActivity % 60000) / 1000);
+                document.getElementById('idleSince').textContent = `${idleMinutes}m ${idleSeconds}s`;
+                
+                // Add to idle time counter
+                if (!state.currentIdleStart) {
+                    state.currentIdleStart = state.lastActivityTime;
+                }
+            } else {
+                // Not idle
+                if (state.currentIdleStart) {
+                    // Was idle, now active again
+                    state.idleTime += now - state.currentIdleStart;
+                    state.currentIdleStart = null;
+                }
+                document.getElementById('idleSince').textContent = '-';
+            }
+            
+            updateActivityDisplay();
+        }
+
+        function updateProductivityScore() {
+            if (!state.clockedIn || !state.clockInTime) {
+                state.productivityScore = 0;
+                return;
+            }
+            
+            const totalWorkTime = Date.now() - state.clockInTime.getTime() - state.totalLunchTime;
+            const activeTime = totalWorkTime - state.idleTime;
+            
+            state.productivityScore = Math.round((activeTime / totalWorkTime) * 100);
+            
+            document.getElementById('productivityScore').textContent = state.productivityScore + '%';
+            document.getElementById('scoreFill').style.width = state.productivityScore + '%';
+            
+            let message = '';
+            if (state.productivityScore >= 90) {
+                message = 'Excellent productivity! Keep up the great work!';
+            } else if (state.productivityScore >= 75) {
+                message = 'Good productivity level. Stay focused!';
+            } else if (state.productivityScore >= 60) {
+                message = 'Fair productivity. Try to minimize distractions.';
+            } else {
+                message = 'Low productivity. Consider taking a short break.';
+            }
+            
+            document.getElementById('scoreMessage').textContent = message;
+        }
+
+        // Time Entry Functions
+        function showAddTimeEntry() {
+            const modalBody = `
+                <form id="timeEntryForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Project</label>
+                            <select class="form-control" id="entryProject" required>
+                                <option value="">Select Project...</option>
+                                ${projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="form-control" id="entryDate" value="${new Date().toISOString().split('T')[0]}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Task Description</label>
+                        <input type="text" class="form-control" id="entryTask" placeholder="What did you work on?" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Start Time</label>
+                            <input type="time" class="form-control" id="entryStartTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label>End Time</label>
+                            <input type="time" class="form-control" id="entryEndTime" required>
+                        </div>
+                    </div>
+                </form>
+            `;
+            
+            const modalFooter = `
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTimeEntry()">Save Entry</button>
+            `;
+            
+            showModal('Add Time Entry', modalBody, modalFooter);
+        }
+
+        function saveTimeEntry() {
+            const project = projects.find(p => p.id == document.getElementById('entryProject').value);
+            const task = document.getElementById('entryTask').value;
+            const date = document.getElementById('entryDate').value;
+            const startTime = document.getElementById('entryStartTime').value;
+            const endTime = document.getElementById('entryEndTime').value;
+            
+            if (!project || !task || !startTime || !endTime) {
+                showError('Please fill in all fields');
+                return;
+            }
+            
+            // Calculate duration
+            const start = new Date(`${date} ${startTime}`);
+            const end = new Date(`${date} ${endTime}`);
+            const duration = (end - start) / (1000 * 60 * 60);
+            
+            if (duration <= 0) {
+                showError('End time must be after start time');
+                return;
+            }
+            
+            const entry = {
+                id: Date.now(),
+                project: project,
+                task: task,
+                date: date,
+                startTime: startTime,
+                endTime: endTime,
+                duration: duration
+            };
+            
+            state.timeEntries.push(entry);
+            displayTimeEntries();
+            closeModal();
+            showSuccess('Time entry added successfully!');
+        }
+
+        function displayTimeEntries() {
+            const grid = document.getElementById('timeEntriesGrid');
+            if (!grid) return;
+            
+            if (state.timeEntries.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: #999;">No time entries yet. Click "Add Entry" to get started.</p>';
+                return;
+            }
+            
+            grid.innerHTML = state.timeEntries.map(entry => `
+                <div class="time-entry-card">
+                    <div class="entry-info">
+                        <div class="entry-project">
+                            <span class="project-badge" style="background: ${entry.project.color}"></span>
+                            ${entry.project.name}
+                        </div>
+                        <div class="entry-task">${entry.task}</div>
+                        <div class="entry-time">
+                            <span>${entry.startTime} - ${entry.endTime}</span>
+                            <span>${entry.date}</span>
+                        </div>
+                    </div>
+                    <div class="entry-duration">${entry.duration.toFixed(2)}h</div>
+                    <div class="entry-actions">
+                        <button class="entry-action-btn edit" onclick="editTimeEntry(${entry.id})">Edit</button>
+                        <button class="entry-action-btn delete" onclick="deleteTimeEntry(${entry.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteTimeEntry(id) {
+            if (confirm('Are you sure you want to delete this time entry?')) {
+                state.timeEntries = state.timeEntries.filter(e => e.id !== id);
+                displayTimeEntries();
+                showSuccess('Time entry deleted');
+            }
+        }
+
+        // Schedule Functions
+        function loadSchedule() {
+            const scheduleGrid = document.getElementById('scheduleGrid');
+            if (!scheduleGrid) return;
+            
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            const today = new Date().getDay();
+            const adjustedToday = today === 0 ? 6 : today - 1; // Adjust for Monday start
+            
+            scheduleGrid.innerHTML = days.map((day, index) => {
+                const isToday = index === adjustedToday;
+                const isWeekend = index >= 5;
+                const schedule = state.currentUser.schedule;
+                
+                return `
+                    <div class="schedule-day ${isToday ? 'today' : ''}">
+                        <div class="day-name">${day}</div>
+                        <div class="schedule-times">
+                            ${isWeekend ? 
+                                '<span class="schedule-time">Off</span>' :
+                                `<span class="schedule-time">🕐 ${schedule.start}</span>
+                                 <span class="schedule-time">🍽️ ${schedule.lunch}min</span>
+                                 <span class="schedule-time">🏁 ${schedule.end}</span>`
+                            }
+                        </div>
+                        <div class="schedule-status ${isWeekend ? 'off' : 'scheduled'}">
+                            ${isWeekend ? 'Day Off' : 'Scheduled'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         // Admin Dashboard Functions
-        function showEmployeeManagement() {
-            setActiveAdminTab('employee-management');
-            const adminContent = document.getElementById('adminContent');
-            if (!adminContent) return;
+        function loadAdminDashboard() {
+            // Update stats
+            updateAdminStats();
             
-            adminContent.innerHTML = `
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h2>👥 Employee Management</h2>
-                        <div class="section-actions">
-                            <button class="action-btn primary" onclick="addNewEmployee()">➕ Add Employee</button>
-                            <button class="action-btn warning" onclick="bulkEmployeeActions()">⚙️ Bulk Actions</button>
-                        </div>
-                    </div>
-                    
-                    <div class="employee-management-grid" id="employeeManagementGrid">
-                        ${generateEmployeeManagementCards()}
-                    </div>
-                </div>
-            `;
+            // Load employee table
+            loadEmployeeTable();
+            
+            // Load pay rate requests
+            loadPayRateRequests();
         }
 
-        function showPayrollDashboard() {
-            setActiveAdminTab('payroll');
-            const adminContent = document.getElementById('adminContent');
-            if (!adminContent) return;
+        function updateAdminStats() {
+            // Calculate active employees
+            let activeCount = 0;
+            let totalHoursToday = 0;
+            let laborCostToday = 0;
             
-            const payrollData = calculatePayrollSummary();
+            // Simulate some data
+            Object.values(employees).forEach(emp => {
+                if (emp.requiresTimesheet) {
+                    const isActive = Math.random() > 0.3; // Simulate some employees being active
+                    if (isActive) {
+                        activeCount++;
+                        const hoursWorked = 4 + Math.random() * 4; // 4-8 hours
+                        totalHoursToday += hoursWorked;
+                        
+                        if (emp.type === 'hourly') {
+                            const rate = getCurrentPayRate(emp);
+                            laborCostToday += hoursWorked * rate;
+                        }
+                    }
+                }
+            });
             
-            adminContent.innerHTML = `
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h2>💰 Payroll Dashboard</h2>
-                        <div class="section-actions">
-                            <button class="action-btn success" onclick="processPayroll()">💸 Process Payroll</button>
-                            <button class="action-btn primary" onclick="exportADPData()">📊 Export to ADP</button>
+            document.getElementById('activeEmployeeCount').textContent = activeCount;
+            document.getElementById('totalHoursToday').textContent = totalHoursToday.toFixed(1);
+            document.getElementById('laborCostToday').textContent = `${laborCostToday.toFixed(0)}`;
+            document.getElementById('pendingRequests').textContent = payRateRequests.filter(r => r.status === 'pending').length;
+        }
+
+        function loadEmployeeTable() {
+            const tbody = document.getElementById('employeeTableBody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = Object.values(employees).map(emp => {
+                const isClocked = sampleTimeEntries.find(e => e.employeeId === emp.id && e.clockIn && !e.clockOut);
+                const todayEntry = sampleTimeEntries.find(e => e.employeeId === emp.id);
+                const hoursToday = isClocked ? ((Date.now() - new Date(`${new Date().toDateString()} ${todayEntry.clockIn}`)) / (1000 * 60 * 60)).toFixed(1) : '0.0';
+                const weekHours = (Math.random() * 40).toFixed(1); // Simulate week hours
+                
+                let status = 'clocked-out';
+                let statusText = 'Clocked Out';
+                
+                if (todayEntry) {
+                    if (todayEntry.absent) {
+                        status = 'absent';
+                        statusText = 'Absent';
+                    } else if (isClocked) {
+                        status = 'clocked-in';
+                        statusText = 'Clocked In';
+                    } else if (todayEntry.late > 0) {
+                        status = 'late';
+                        statusText = `Late (${todayEntry.late} min)`;
+                    }
+                }
+                
+                return `
+                    <tr>
+                        <td>
+                            <div class="employee-cell">
+                                <img src="${emp.photo}" alt="${emp.name}" class="employee-avatar">
+                                <div class="employee-info">
+                                    <div class="employee-name">${emp.name}</div>
+                                    <div class="employee-id">ID: ${emp.id}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${emp.type.charAt(0).toUpperCase() + emp.type.slice(1)}</td>
+                        <td><span class="status-badge ${status}">${statusText}</span></td>
+                        <td>${hoursToday}h</td>
+                        <td>${weekHours}h</td>
+                        <td>${emp.type === 'hourly' ? `${getCurrentPayRate(emp)}/hr` : 'Salary'}</td>
+                        <td>
+                            <button class="btn btn-primary" onclick="viewEmployeeDetails(${emp.id})">View</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function loadPayRateRequests() {
+            const container = document.getElementById('payRateRequests');
+            if (!container) return;
+            
+            const pendingRequests = payRateRequests.filter(r => r.status === 'pending');
+            
+            if (pendingRequests.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No pending pay rate requests</p>';
+                return;
+            }
+            
+            container.innerHTML = pendingRequests.map(request => {
+                const employee = employees[request.employeeId];
+                const increase = request.requestedRate - request.currentRate;
+                const percentIncrease = ((increase / request.currentRate) * 100).toFixed(1);
+                
+                return `
+                    <div class="pay-rate-request-card">
+                        <div class="request-header">
+                            <div class="request-employee">${employee.name}</div>
+                            <div class="request-date">Submitted ${new Date(request.submittedDate).toLocaleDateString()}</div>
+                        </div>
+                        <div class="request-details">
+                            <div class="request-detail">
+                                <div class="request-label">Current Rate</div>
+                                <div class="request-value current">${request.currentRate}</div>
+                            </div>
+                            <div class="request-detail">
+                                <div class="request-label">Requested Rate</div>
+                                <div class="request-value requested">${request.requestedRate}</div>
+                            </div>
+                            <div class="request-detail">
+                                <div class="request-label">Increase</div>
+                                <div class="request-value increase">+${increase} (${percentIncrease}%)</div>
+                            </div>
+                        </div>
+                        <div class="request-justification">
+                            <strong>Justification:</strong> ${request.justification}
+                        </div>
+                        <div class="request-actions">
+                            <button class="btn btn-success" onclick="approvePayRateRequest(${request.id})">Approve</button>
+                            <button class="btn btn-danger" onclick="denyPayRateRequest(${request.id})">Deny</button>
+                            <button class="btn btn-primary" onclick="viewPayRateDetails(${request.id})">Details</button>
                         </div>
                     </div>
-                    
-                    <div class="payroll-summary">
-                        <div class="payroll-card">
-                            <h3>Total Regular Hours</h3>
-                            <div class="payroll-amount">${payrollData.totalRegularHours}</div>
-                        </div>
-                        <div class="payroll-card">
-                            <h3>Total Overtime Hours</h3>
-                            <div class="payroll-amount">${payrollData.totalOvertimeHours}</div>
-                        </div>
-                        <div class="payroll-card">
-                            <h3>Total Gross Pay</h3>
-                            <div class="payroll-amount">${payrollData.totalGrossPay}</div>
-                        </div>
-                        <div class="payroll-card">
-                            <h3>Active Employees</h3>
-                            <div class="payroll-amount">${payrollData.activeEmployees}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="payroll-details">
-                        <h3>Employee Payroll Breakdown</h3>
-                        <table class="payroll-table">
-                            <thead>
+                `;
+            }).join('');
+        }
+
+        function approvePayRateRequest(requestId) {
+            const request = payRateRequests.find(r => r.id === requestId);
+            if (!request) return;
+            
+            if (confirm(`Approve pay rate increase for ${employees[request.employeeId].name} from ${request.currentRate} to ${request.requestedRate}?`)) {
+                request.status = 'approved';
+                request.approvedDate = new Date();
+                
+                // Update employee pay rate
+                employees[request.employeeId].payRate = request.requestedRate;
+                
+                showSuccess('Pay rate request approved!');
+                loadPayRateRequests();
+                updateAdminStats();
+            }
+        }
+
+        function denyPayRateRequest(requestId) {
+            const request = payRateRequests.find(r => r.id === requestId);
+            if (!request) return;
+            
+            const reason = prompt('Please provide a reason for denial:');
+            if (reason) {
+                request.status = 'denied';
+                request.deniedDate = new Date();
+                request.denialReason = reason;
+                
+                showSuccess('Pay rate request denied');
+                loadPayRateRequests();
+            }
+        }
+
+        // Report Functions
+        function generateReport(type) {
+            let content = '';
+            
+            switch(type) {
+                case 'attendance':
+                    content = generateAttendanceReport();
+                    break;
+                case 'productivity':
+                    content = generateProductivityReport();
+                    break;
+                case 'payroll':
+                    content = generatePayrollReport();
+                    break;
+            }
+            
+            showModal(`${type.charAt(0).toUpperCase() + type.slice(1)} Report`, content);
+        }
+
+        function generateAttendanceReport() {
+            return `
+                <div class="report-content">
+                    <h4>Attendance Summary - Last 30 Days</h4>
+                    <table class="employee-table" style="margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Days Worked</th>
+                                <th>Late Arrivals</th>
+                                <th>Absences</th>
+                                <th>On-Time %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Object.values(employees).filter(e => e.requiresTimesheet).map(emp => `
                                 <tr>
-                                    <th>Employee</th>
-                                    <th>Type</th>
-                                    <th>Rate</th>
-                                    <th>Regular Hours</th>
-                                    <th>Overtime Hours</th>
-                                    <th>Gross Pay</th>
-                                    <th>Actions</th>
+                                    <td>${emp.name}</td>
+                                    <td>${20 + Math.floor(Math.random() * 3)}</td>
+                                    <td>${Math.floor(Math.random() * 5)}</td>
+                                    <td>${Math.floor(Math.random() * 2)}</td>
+                                    <td>${85 + Math.floor(Math.random() * 15)}%</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                ${generatePayrollTableRows()}
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="requests-container">
-                        <h3>📝 Pending Pay Rate Requests</h3>
-                        ${generatePayRateRequestCards()}
-                    </div>
+                            `).join('')}
+                        </tbody>
+                    </table>
                 </div>
             `;
         }
 
-        function showReports() {
-            setActiveAdminTab('reports');
-            const adminContent = document.getElementById('adminContent');
-            if (!adminContent) return;
-            
-            adminContent.innerHTML = `
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h2>📊 Reports & Analytics</h2>
-                        <div class="section-actions">
-                            <button class="action-btn primary" onclick="generateCustomReport()">📋 Custom Report</button>
-                            <button class="action-btn warning" onclick="scheduleReport()">⏰ Schedule Report</button>
-                        </div>
-                    </div>
-                    
-                    <div class="reports-grid">
-                        <div class="report-card">
-                            <h3>📈 Attendance Summary</h3>
-                            <div class="report-stats">
-                                <div class="stat">
-                                    <span class="stat-label">Average Hours/Week:</span>
-                                    <span class="stat-value">38.5</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-label">On-Time Arrivals:</span>
-                                    <span class="stat-value">92%</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-label">Absent Days:</span>
-                                    <span class="stat-value">3</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="report-card">
-                            <h3>💰 Labor Cost Analysis</h3>
-                            <div class="report-stats">
-                                <div class="stat">
-                                    <span class="stat-label">Weekly Labor Cost:</span>
-                                    <span class="stat-value">$8,450</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-label">Overtime Percentage:</span>
-                                    <span class="stat-value">12%</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-label">Cost per Hour:</span>
-                                    <span class="stat-value">$19.25</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="report-card">
-                            <h3>🎯 Productivity Metrics</h3>
-                            <div class="report-stats">
-                                <div class="stat">
-                                    <span class="stat-label">Average Productivity:</span>
-                                    <span class="stat-value">87%</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-label">Idle Time:</span>
-                                    <span class="stat-value">8.5%</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-label">Break Compliance:</span>
-                                    <span class="stat-value">95%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        function generateProductivityReport() {
+            return `
+                <div class="report-content">
+                    <h4>Productivity Analysis - Current Week</h4>
+                    <table class="employee-table" style="margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Total Hours</th>
+                                <th>Active Time</th>
+                                <th>Idle Time</th>
+                                <th>Productivity Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Object.values(employees).filter(e => e.requiresTimesheet).map(emp => {
+                                const totalHours = 20 + Math.random() * 20;
+                                const idlePercent = 5 + Math.random() * 20;
+                                const activeHours = totalHours * (1 - idlePercent / 100);
+                                const score = Math.round(100 - idlePercent);
+                                
+                                return `
+                                    <tr>
+                                        <td>${emp.name}</td>
+                                        <td>${totalHours.toFixed(1)}h</td>
+                                        <td>${activeHours.toFixed(1)}h</td>
+                                        <td>${(totalHours - activeHours).toFixed(1)}h</td>
+                                        <td>${score}%</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
                 </div>
             `;
         }
 
-        function showSystemSettings() {
-            setActiveAdminTab('settings');
-            const adminContent = document.getElementById('adminContent');
-            if (!adminContent) return;
-            
-            adminContent.innerHTML = `
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h2>⚙️ System Settings</h2>
-                        <div class="section-actions">
-                            <button class="action-btn success" onclick="saveSystemSettings()">💾 Save Settings</button>
-                            <button class="action-btn danger" onclick="resetToDefaults()">🔄 Reset to Defaults</button>
-                        </div>
-                    </div>
-                    
-                    <div class="settings-grid">
-                        <div class="settings-card">
-                            <h3>⏰ Time Tracking Settings</h3>
-                            <div class="setting-item">
-                                <label>
-                                    <input type="checkbox" checked> Enable automatic clock-out
-                                </label>
-                            </div>
-                            <div class="setting-item">
-                                <label>Activity monitoring interval (minutes):</label>
-                                <input type="number" value="5" min="1" max="60">
-                            </div>
-                            <div class="setting-item">
-                                <label>Idle timeout (minutes):</label>
-                                <input type="number" value="15" min="5" max="120">
-                            </div>
-                        </div>
-                        
-                        <div class="settings-card">
-                            <h3>💰 Payroll Settings</h3>
-                            <div class="setting-item">
-                                <label>Default overtime threshold:</label>
-                                <select>
-                                    <option value="40" selected>40 hours/week</option>
-                                    <option value="8">8 hours/day</option>
-                                    <option value="80">80 hours/bi-weekly</option>
-                                </select>
-                            </div>
-                            <div class="setting-item">
-                                <label>Default overtime rate:</label>
-                                <input type="number" value="1.5" step="0.1" min="1" max="3">
-                            </div>
-                            <div class="setting-item">
-                                <label>
-                                    <input type="checkbox" checked> Enable shift differentials
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="settings-card">
-                            <h3>🔐 Security Settings</h3>
-                            <div class="setting-item">
-                                <label>Session timeout (minutes):</label>
-                                <input type="number" value="30" min="5" max="480">
-                            </div>
-                            <div class="setting-item">
-                                <label>Maximum login attempts:</label>
-                                <input type="number" value="3" min="1" max="10">
-                            </div>
-                            <div class="setting-item">
-                                <label>
-                                    <input type="checkbox" checked> Require PIN for clock in/out
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="settings-card">
-                            <h3>📊 Reporting Settings</h3>
-                            <div class="setting-item">
-                                <label>
-                                    <input type="checkbox" checked> Auto-generate weekly reports
-                                </label>
-                            </div>
-                            <div class="setting-item">
-                                <label>Report email recipients:</label>
-                                <input type="email" placeholder="admin@company.com">
-                            </div>
-                            <div class="setting-item">
-                                <label>Data retention period (months):</label>
-                                <input type="number" value="24" min="12" max="84">
-                            </div>
-                        </div>
-                    </div>
+        function generatePayrollReport() {
+            return `
+                <div class="report-content">
+                    <h4>Payroll Summary - Current Pay Period</h4>
+                    <table class="employee-table" style="margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Type</th>
+                                <th>Regular Hours</th>
+                                <th>OT Hours</th>
+                                <th>Pay Rate</th>
+                                <th>Gross Pay</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Object.values(employees).map(emp => {
+                                if (emp.type === 'salary') {
+                                    return `
+                                        <tr>
+                                            <td>${emp.name}</td>
+                                            <td>Salary</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>Salary</td>
+                                            <td>${(80000 / 26).toFixed(2)}</td>
+                                        </tr>
+                                    `;
+                                } else {
+                                    const regularHours = 35 + Math.random() * 5;
+                                    const otHours = Math.max(0, Math.random() * 10 - 5);
+                                    const rate = getCurrentPayRate(emp);
+                                    const regularPay = regularHours * rate;
+                                    const otPay = otHours * rate * 1.5;
+                                    const totalPay = regularPay + otPay;
+                                    
+                                    return `
+                                        <tr>
+                                            <td>${emp.name}</td>
+                                            <td>Hourly</td>
+                                            <td>${regularHours.toFixed(1)}</td>
+                                            <td>${otHours.toFixed(1)}</td>
+                                            <td>${rate}/hr</td>
+                                            <td>${totalPay.toFixed(2)}</td>
+                                        </tr>
+                                    `;
+                                }
+                            }).join('')}
+                        </tbody>
+                    </table>
                 </div>
             `;
         }
+
+        // ADP Export
+        function exportADP() {
+            const csvContent = generateADPExport();
+            downloadFile(csvContent, `ADP_Export_${new Date().toISOString().split('T')[0]}.csv`, 'text/csv');
+            showSuccess('ADP export file generated successfully!');
+        }
+
+        function generateADPExport() {
+            let csv = 'Employee ID,Employee Name,Pay Type,Regular Hours,Overtime Hours,Sick Hours,Vacation Hours,Pay Rate,Gross Pay\n';
+            
+            Object.values(employees).forEach(emp => {
+                if (emp.type === 'salary') {
+                    csv += `${emp.id},"${emp.name}",Salary,80,0,0,0,N/A,${(80000 / 26).toFixed(2)}\n`;
+                } else {
+                    const regularHours = 35 + Math.random() * 5;
+                    const otHours = Math.max(0, Math.random() * 10 - 5);
+                    const rate = getCurrentPayRate(emp);
+                    const grossPay = (regularHours * rate) + (otHours * rate * 1.5);
+                    
+                    csv += `${emp.id},"${emp.name}",Hourly,${regularHours.toFixed(2)},${otHours.toFixed(2)},0,0,${rate},${grossPay.toFixed(2)}\n`;
+                }
+            });
+            
+            return csv;
+        }
+
+        function exportEmployeeData() {
+            const csvContent = generateEmployeeExport();
+            downloadFile(csvContent, `Employee_Data_${new Date().toISOString().split('T')[0]}.csv`, 'text/csv');
+            showSuccess('Employee data exported successfully!');
+        }
+
+        function generateEmployeeExport() {
+            let csv = 'Employee ID,Name,Type,Admin Access,Pay Rate,Schedule Start,Schedule End,Lunch Duration\n';
+            
+            Object.values(employees).forEach(emp => {
+                const rate = emp.type === 'hourly' ? getCurrentPayRate(emp) : 'N/A';
+                csv += `${emp.id},"${emp.name}",${emp.type},${emp.isAdmin},${rate},${emp.schedule.start},${emp.schedule.end},${emp.schedule.lunch}\n`;
+            });
+            
+            return csv;
+        }
+
+        // Utility Functions
+        function showModal(title, body, footer) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = body;
+            
+            if (footer) {
+                document.getElementById('modalFooter').innerHTML = footer;
+                document.getElementById('modalFooter').style.display = 'flex';
+            } else {
+                document.getElementById('modalFooter').style.display = 'none';
+            }
+            
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function showSuccess(message) {
+            const successEl = document.getElementById('successMessage');
+            document.getElementById('successText').textContent = message;
+            successEl.classList.add('active');
+            
+            setTimeout(() => {
+                successEl.classList.remove('active');
+            }, 3000);
+        }
+
+        function showError(message) {
+            alert('Error: ' + message);
+        }
+
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type: type });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function searchEmployees(query) {
+            const rows = document.querySelectorAll('#employeeTableBody tr');
+            const lowerQuery = query.toLowerCase();
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(lowerQuery) ? '' : 'none';
+            });
+        }
+
+        function viewEmployeeDetails(employeeId) {
+            const emp = employees[employeeId];
+            if (!emp) return;
+            
+            const content = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img src="${emp.photo}" alt="${emp.name}" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 10px;">
+                    <h3>${emp.name}</h3>
+                    <p style="color: #666;">Employee ID: ${emp.id}</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Type:</label>
+                    <p>${emp.type.charAt(0).toUpperCase() + emp.type.slice(1)}</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Admin Access:</label>
+                    <p>${emp.isAdmin ? 'Yes' : 'No'}</p>
+                </div>
+                
+                ${emp.type === 'hourly' ? `
+                    <div class="form-group">
+                        <label>Current Pay Rate:</label>
+                        <p>${getCurrentPayRate(emp)}/hour</p>
+                    </div>
+                    
+                    ${emp.futureRate ? `
+                        <div class="form-group" style="background: #fff3cd; padding: 10px; border-radius: 5px;">
+                            <label>Scheduled Rate Increase:</label>
+                            <p>${emp.futureRate.rate}/hour effective ${emp.futureRate.effectiveDate.toLocaleDateString()}</p>
+                        </div>
+                    ` : ''}
+                ` : ''}
+                
+                <div class="form-group">
+                    <label>Schedule:</label>
+                    <p>${emp.schedule.start} - ${emp.schedule.end} (${emp.schedule.lunch} min lunch)</p>
+                </div>
+            `;
+            
+            showModal('Employee Details', content);
+        }
+
+        // Check for automatic pay rate increases
+        function checkPayRateIncreases() {
+            Object.values(employees).forEach(emp => {
+                if (emp.futureRate && new Date() >= emp.futureRate.effectiveDate) {
+                    console.log(`Pay rate increase activated for ${emp.name}: ${emp.payRate} → ${emp.futureRate.rate}`);
+                }
+            });
+        }
+
+        // Initialize the application
+        init();
+    </script>
+</body>
+</html>
