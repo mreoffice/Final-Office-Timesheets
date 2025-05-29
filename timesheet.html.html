@@ -33,8 +33,6 @@
             --gray: #D1D5DB;
             --light: #1F2937;
             --white: #111827;
-            --shadow-sm: 0 1px 2px 0 rgba(255, 255, 255, 0.05);
-            --shadow: 0 1px 3px 0 rgba(255, 255, 255, 0.1), 0 1px 2px 0 rgba(255, 255, 255, 0.06);
         }
 
         * {
@@ -49,6 +47,156 @@
             color: var(--dark);
             line-height: 1.6;
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Grid System */
+        .grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+        /* Page Layout */
+        .page-header {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        /* App Layout */
+        .app-main {
+            flex: 1;
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .header-left, .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            border-radius: 50px;
+            background: var(--light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-menu:hover {
+            background: #E5E7EB;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        /* Clock Display */
+        .clock-display {
+            text-align: center;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            margin-bottom: 32px;
+        }
+
+        .clock-time {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .clock-date {
+            font-size: 18px;
+            color: var(--gray);
+            margin-bottom: 32px;
+        }
+
+        .clock-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .clock-btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 140px;
+            justify-content: center;
+        }
+
+        .clock-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .clock-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         /* Security Badge */
@@ -183,35 +331,7 @@
         .twofa-input:focus {
             border-color: var(--primary);
             transform: scale(1.05);
-        }
-
-        /* Biometric Auth */
-        .biometric-auth {
-            display: flex;
-            gap: 16px;
-            margin-top: 20px;
-        }
-
-        .biometric-btn {
-            flex: 1;
-            padding: 16px;
-            border: 2px solid #E5E7EB;
-            border-radius: 12px;
-            background: var(--white);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .biometric-btn:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .biometric-icon {
-            font-size: 32px;
-            margin-bottom: 8px;
+            outline: none;
         }
 
         /* Enhanced Form Controls */
@@ -260,7 +380,7 @@
         .session-info {
             position: fixed;
             top: 20px;
-            right: 20px;
+            right: 80px;
             background: rgba(0, 0, 0, 0.8);
             color: white;
             padding: 12px 20px;
@@ -606,6 +726,21 @@
             box-shadow: var(--shadow-md);
         }
 
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
         /* Status Cards with Animation */
         .status-card {
             background: var(--white);
@@ -631,6 +766,72 @@
         .status-card:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-lg);
+        }
+
+        .status-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .status-label {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 8px;
+        }
+
+        .status-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .status-value.success {
+            color: var(--success);
+        }
+
+        .status-value.warning {
+            color: var(--warning);
+        }
+
+        /* Activity Indicators */
+        .activity-bar {
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .activity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success) 0%, var(--primary) 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .activity-indicators {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .activity-indicator {
+            text-align: center;
+            padding: 16px;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .indicator-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .indicator-label {
+            font-size: 12px;
+            color: var(--gray);
         }
 
         /* Break Reminder */
@@ -750,8 +951,298 @@
             }
         }
 
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--dark);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            animation: slideInUp 0.3s ease;
+            z-index: 1100;
+            max-width: 400px;
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+        .toast.warning { background: var(--warning); }
+        .toast.info { background: var(--info); }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--light);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 20px;
+            color: var(--gray);
+        }
+
+        .modal-close:hover {
+            background: #E5E7EB;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 24px;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+            border: 2px solid #E5E7EB;
+        }
+
+        .btn-secondary:hover {
+            background: #F3F4F6;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            min-width: 200px;
+            margin-top: 8px;
+            display: none;
+            z-index: 50;
+            overflow: hidden;
+        }
+
+        .dropdown.active .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            color: var(--dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--light);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #E5E7EB;
+            margin: 8px 0;
+        }
+
+        /* Time Entry Rows */
+        .time-entry-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .time-entry-row .form-control {
+            margin-bottom: 0;
+        }
+
+        .time-entry-row .btn {
+            padding: 8px 12px;
+            min-width: auto;
+        }
+
+        /* Table Styles */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .table th {
+            font-weight: 600;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        /* Profile Styles */
+        .profile-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .profile-item:last-child {
+            border-bottom: none;
+        }
+
+        .profile-section {
+            margin-bottom: 24px;
+        }
+
+        .profile-section h4,
+        .profile-section h5 {
+            margin-bottom: 16px;
+            color: var(--dark);
+        }
+
         /* Responsive Enhancements */
         @media (max-width: 768px) {
+            .grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .grid-cols-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
             .quick-actions {
                 bottom: 70px;
             }
@@ -767,6 +1258,20 @@
             }
             
             .insight-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .clock-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .clock-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .activity-indicators {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
@@ -873,15 +1378,10 @@
                         </div>
                     </div>
 
-                    <div class="biometric-auth">
-                        <div class="biometric-btn" onclick="simulateFaceID()">
-                            <div class="biometric-icon">👤</div>
-                            <div>Face ID</div>
-                        </div>
-                        <div class="biometric-btn" onclick="simulateFingerprint()">
-                            <div class="biometric-icon">👆</div>
-                            <div>Touch ID</div>
-                        </div>
+                    <div style="text-align: center; margin-top: 16px;">
+                        <a href="#" onclick="showForgotPassword()" style="color: var(--primary); text-decoration: none; font-size: 14px;">
+                            Forgot Password?
+                        </a>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-block" style="margin-top: 24px;">
@@ -892,7 +1392,7 @@
                 <!-- 2FA Section (Hidden by default) -->
                 <div class="twofa-section" id="twofaSection" style="display: none;">
                     <h3>Two-Factor Authentication</h3>
-                    <p>Enter the 6-digit code from your authenticator app</p>
+                    <p>Enter the 6-digit code sent to your email</p>
                     <div class="twofa-code-inputs">
                         <input type="text" class="twofa-input" maxlength="1" onkeyup="handle2FAInput(this, 0)">
                         <input type="text" class="twofa-input" maxlength="1" onkeyup="handle2FAInput(this, 1)">
@@ -904,6 +1404,73 @@
                     <button class="btn btn-primary btn-block" onclick="verify2FA()">
                         Verify Code
                     </button>
+                    <div style="text-align: center; margin-top: 16px;">
+                        <a href="#" onclick="tracker.resetLogin()" style="color: var(--gray); text-decoration: none; font-size: 14px;">
+                            Back to Login
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Forgot Password Section (Hidden by default) -->
+                <div class="twofa-section" id="forgotPasswordSection" style="display: none;">
+                    <div id="forgotStep1" style="display: block;">
+                        <h3>🔐 Forgot Your Password?</h3>
+                        <p style="margin-bottom: 20px;">No worries! Enter your email address and we'll send you a reset code.</p>
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="forgotEmail" placeholder="Enter your email address" required>
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="sendResetCode()">
+                            📧 Send Reset Code
+                        </button>
+                    </div>
+                    
+                    <div id="forgotStep2" style="display: none;">
+                        <h3>✅ Check Your Email!</h3>
+                        <p style="margin-bottom: 20px;">We've sent a 6-digit code to your email. Enter it below along with your new password.</p>
+                        
+                        <div class="form-group">
+                            <label class="form-label">6-Digit Reset Code</label>
+                            <input type="text" class="form-control" id="resetCode" maxlength="6" 
+                                   placeholder="Enter code from email" required 
+                                   style="text-align: center; font-size: 18px; letter-spacing: 2px;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" required 
+                                   minlength="8" placeholder="Create a new password">
+                            <small style="color: var(--gray);">Must be at least 8 characters long</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirmNewPassword" required 
+                                   minlength="8" placeholder="Confirm your new password">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 8px; font-size: 14px;">
+                                <input type="checkbox" id="rememberMe">
+                                <span>🕐 Keep me logged in for 30 days</span>
+                            </label>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-block" onclick="completePasswordReset()">
+                            🔑 Reset My Password
+                        </button>
+                        
+                        <div style="margin-top: 16px; padding: 12px; background: #EFF6FF; border-radius: 8px; font-size: 14px;">
+                            <strong>📝 Note:</strong> You don't need your old password - that's the whole point! 
+                            Just the code from your email and a new password.
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 16px;">
+                        <a href="#" onclick="backToLogin()" style="color: var(--gray); text-decoration: none; font-size: 14px;">
+                            ← Back to Login
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -947,20 +1514,20 @@
                         </div>
                         
                         <div class="dropdown-menu">
-                            <a href="#" class="dropdown-item" onclick="showProfile()">
+                            <a href="#" class="dropdown-item" onclick="tracker.showProfile()">
                                 <span>👤</span> My Profile
                             </a>
-                            <a href="#" class="dropdown-item" onclick="showAchievements()">
+                            <a href="#" class="dropdown-item" onclick="tracker.showAchievements()">
                                 <span>🏆</span> Achievements
                             </a>
-                            <a href="#" class="dropdown-item" onclick="showSettings()">
+                            <a href="#" class="dropdown-item" onclick="tracker.showSettings()">
                                 <span>⚙️</span> Settings
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="#" class="dropdown-item" onclick="showShortcuts()">
                                 <span>⌨️</span> Keyboard Shortcuts
                             </a>
-                            <a href="#" class="dropdown-item" onclick="secureLogout()">
+                            <a href="#" class="dropdown-item" onclick="tracker.secureLogout()">
                                 <span>🚪</span> Secure Logout
                             </a>
                         </div>
@@ -1021,7 +1588,7 @@
     <div class="notification-center" id="notificationCenter">
         <div class="notification-header">
             <h3>Notifications</h3>
-            <button onclick="clearAllNotifications()">Clear All</button>
+            <button onclick="tracker.clearAllNotifications()">Clear All</button>
         </div>
         <div class="notification-list" id="notificationList">
             <!-- Notifications will be populated here -->
@@ -1186,15 +1753,18 @@
                 return btoa(String.fromCharCode(...array));
             }
 
-            // Secure database initialization
+            // Secure database initialization with localStorage fallback
             initSecureDatabase() {
+                // Check if localStorage is available
+                this.storageAvailable = this.testLocalStorage();
+                
                 const db = {
-                    users: this.decryptData(localStorage.getItem('mre_secure_users')) || [],
-                    sessions: this.decryptData(localStorage.getItem('mre_secure_sessions')) || [],
-                    timeEntries: this.decryptData(localStorage.getItem('mre_secure_timeEntries')) || [],
-                    requests: this.decryptData(localStorage.getItem('mre_secure_requests')) || [],
-                    settings: this.decryptData(localStorage.getItem('mre_secure_settings')) || {},
-                    auditLog: this.decryptData(localStorage.getItem('mre_secure_audit')) || []
+                    users: this.getData('mre_secure_users') || [],
+                    sessions: this.getData('mre_secure_sessions') || [],
+                    timeEntries: this.getData('mre_secure_timeEntries') || [],
+                    requests: this.getData('mre_secure_requests') || [],
+                    settings: this.getData('mre_secure_settings') || {},
+                    auditLog: this.getData('mre_secure_audit') || []
                 };
 
                 // Initialize with default users if empty
@@ -1205,92 +1775,117 @@
                 return db;
             }
 
+            // Test localStorage availability
+            testLocalStorage() {
+                try {
+                    localStorage.setItem('test', 'test');
+                    localStorage.removeItem('test');
+                    return true;
+                } catch (e) {
+                    console.warn('localStorage not available, using memory storage');
+                    this.memoryStorage = {};
+                    return false;
+                }
+            }
+
+            // Get data with fallback
+            getData(key) {
+                if (this.storageAvailable) {
+                    return this.decryptData(localStorage.getItem(key));
+                } else {
+                    return this.memoryStorage[key] ? this.decryptData(this.memoryStorage[key]) : null;
+                }
+            }
+
+            // Set data with fallback
+            setData(key, value) {
+                const encrypted = this.encryptData(value);
+                if (this.storageAvailable) {
+                    localStorage.setItem(key, encrypted);
+                } else {
+                    this.memoryStorage[key] = encrypted;
+                }
+            }
+
             async initializeDefaultUsers(db) {
                 const defaultUsers = [
                     {
                         id: 1,
                         name: 'Rachael',
-                        email: 'rachael@mre.com',
+                        email: 'mrselectrictucson@gmail.com',
                         employeeId: 'EMP001',
                         type: 'salary',
                         isAdmin: true,
                         requiresTimesheet: false,
                         photo: 'https://i.pravatar.cc/150?img=1',
-                        twoFactorEnabled: true,
-                        biometricEnabled: true
+                        twoFactorEnabled: true
                     },
                     {
                         id: 2,
                         name: 'Brad',
-                        email: 'brad@mre.com',
+                        email: 'mr.electric.tucson@gmail.com',
                         employeeId: 'EMP002',
                         type: 'salary',
                         isAdmin: true,
                         requiresTimesheet: false,
                         photo: 'https://i.pravatar.cc/150?img=2',
-                        twoFactorEnabled: true,
-                        biometricEnabled: true
+                        twoFactorEnabled: true
                     },
                     {
                         id: 3,
                         name: 'Cherish',
-                        email: 'cherish@mre.com',
+                        email: 'mrelectriccherish@gmail.com',
                         employeeId: 'EMP003',
                         type: 'hourly',
                         isAdmin: true,
                         requiresTimesheet: true,
                         photo: 'https://i.pravatar.cc/150?img=3',
-                        twoFactorEnabled: false,
-                        biometricEnabled: true
+                        twoFactorEnabled: false
                     },
                     {
                         id: 4,
                         name: 'Logan',
-                        email: 'logan@mre.com',
+                        email: 'tucson@mrelectric.com',
                         employeeId: 'EMP004',
                         type: 'hourly',
                         isAdmin: true,
                         requiresTimesheet: true,
                         photo: 'https://i.pravatar.cc/150?img=4',
                         twoFactorEnabled: true,
-                        biometricEnabled: true,
                         showEarnings: true // Special flag for Logan
                     },
                     {
                         id: 5,
                         name: 'Anastosia',
-                        email: 'anastosia@mre.com',
+                        email: 'mrelectricoffice2@gmail.com',
                         employeeId: 'EMP005',
                         type: 'hourly',
                         isAdmin: false,
                         requiresTimesheet: true,
                         photo: 'https://i.pravatar.cc/150?img=5',
-                        twoFactorEnabled: false,
-                        biometricEnabled: false
+                        twoFactorEnabled: false
                     },
                     {
                         id: 6,
                         name: 'Bryce',
-                        email: 'bryce@mre.com',
+                        email: 'mrelectricoffice3@gmail.com',
                         employeeId: 'EMP006',
                         type: 'hourly',
                         isAdmin: false,
                         requiresTimesheet: true,
                         photo: 'https://i.pravatar.cc/150?img=6',
-                        twoFactorEnabled: false,
-                        biometricEnabled: false
+                        twoFactorEnabled: false
                     },
                     {
                         id: 7,
                         name: 'Ben',
-                        email: 'ben@mre.com',
+                        email: 'mrelectricoffice4@gmail.com',
                         employeeId: 'EMP007',
                         type: 'hourly',
                         isAdmin: false,
                         requiresTimesheet: true,
                         photo: 'https://i.pravatar.cc/150?img=7',
-                        twoFactorEnabled: false,
-                        biometricEnabled: false
+                        twoFactorEnabled: false
                     }
                 ];
 
@@ -1301,6 +1896,8 @@
                     user.lastLogin = null;
                     user.failedAttempts = 0;
                     user.lockedUntil = null;
+                    user.resetToken = null;
+                    user.resetExpiry = null;
                     db.users.push(user);
                 }
 
@@ -1329,12 +1926,12 @@
             }
 
             saveSecureDatabase() {
-                localStorage.setItem('mre_secure_users', this.encryptData(this.db.users));
-                localStorage.setItem('mre_secure_sessions', this.encryptData(this.db.sessions));
-                localStorage.setItem('mre_secure_timeEntries', this.encryptData(this.db.timeEntries));
-                localStorage.setItem('mre_secure_requests', this.encryptData(this.db.requests));
-                localStorage.setItem('mre_secure_settings', this.encryptData(this.db.settings));
-                localStorage.setItem('mre_secure_audit', this.encryptData(this.db.auditLog));
+                this.setData('mre_secure_users', this.db.users);
+                this.setData('mre_secure_sessions', this.db.sessions);
+                this.setData('mre_secure_timeEntries', this.db.timeEntries);
+                this.setData('mre_secure_requests', this.db.requests);
+                this.setData('mre_secure_settings', this.db.settings);
+                this.setData('mre_secure_audit', this.db.auditLog);
             }
 
             // Audit logging
@@ -1395,7 +1992,7 @@
                 setInterval(() => this.updateWeather(), 600000); // Every 10 minutes
                 
                 // Check for saved theme
-                const savedTheme = localStorage.getItem('mre_theme');
+                const savedTheme = this.getData('mre_theme');
                 if (savedTheme === 'dark') {
                     this.darkMode = true;
                     document.body.setAttribute('data-theme', 'dark');
@@ -1662,20 +2259,27 @@
             }
 
             checkRememberedSession() {
-                const savedSession = localStorage.getItem('mre_saved_session');
+                const savedSession = this.getData('mre_saved_session');
                 if (savedSession) {
-                    const session = this.decryptData(savedSession);
-                    if (session && session.expiry > Date.now()) {
+                    if (savedSession && savedSession.expiry > Date.now()) {
                         // Verify fingerprint
-                        if (session.fingerprint === this.fingerprint) {
-                            this.sessionToken = session.token;
-                            this.sessionExpiry = session.expiry;
-                            this.currentUser = session.user;
+                        if (savedSession.fingerprint === this.fingerprint) {
+                            this.sessionToken = savedSession.token;
+                            this.sessionExpiry = savedSession.expiry;
+                            this.currentUser = savedSession.user;
                             this.showApp();
                         } else {
-                            localStorage.removeItem('mre_saved_session');
+                            this.removeData('mre_saved_session');
                         }
                     }
+                }
+            }
+
+            removeData(key) {
+                if (this.storageAvailable) {
+                    localStorage.removeItem(key);
+                } else {
+                    delete this.memoryStorage[key];
                 }
             }
 
@@ -1746,7 +2350,7 @@
                     user: user,
                     fingerprint: this.fingerprint
                 };
-                localStorage.setItem('mre_saved_session', this.encryptData(rememberSession));
+                this.setData('mre_saved_session', rememberSession);
                 
                 // Log successful login
                 this.logAudit('login_success', { userId: user.id });
@@ -1761,6 +2365,51 @@
                 return true;
             }
 
+            // Generate 2FA code
+            generate2FACode() {
+                return Math.floor(100000 + Math.random() * 900000).toString();
+            }
+
+            // Simulate sending email (in production, this would call your email service)
+            async sendEmail(to, subject, body) {
+                console.log(`Email sent to ${to}:`);
+                console.log(`Subject: ${subject}`);
+                console.log(`Body: ${body}`);
+                
+                // Show simulation message
+                showToast(`Verification code sent to ${to}`, 'info');
+                
+                return true;
+            }
+
+            // Send 2FA code via email
+            async send2FACode(user) {
+                const code = this.generate2FACode();
+                
+                // Store code temporarily (expires in 10 minutes)
+                user.twoFactorCode = code;
+                user.twoFactorExpiry = Date.now() + (10 * 60 * 1000);
+                this.saveSecureDatabase();
+                
+                // Send email
+                const subject = 'MRE SecureTime™ - Login Verification Code';
+                const body = `
+Hello ${user.name},
+
+Your login verification code is: ${code}
+
+This code will expire in 10 minutes.
+
+If you didn't request this code, please contact your administrator immediately.
+
+Best regards,
+MRE SecureTime™ Security Team
+                `;
+                
+                await this.sendEmail(user.email, subject, body);
+                return code; // For demo purposes, return the code
+            }
+
             verify2FA(code) {
                 // In production, verify against actual TOTP
                 const expectedCode = '123456'; // Demo code
@@ -1770,36 +2419,6 @@
                 } else {
                     showToast('Invalid 2FA code', 'error');
                     return false;
-                }
-            }
-
-            async simulateFaceID() {
-                showToast('Scanning face...', 'info');
-                
-                // Simulate face recognition delay
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // Check if user has biometric enabled
-                const user = this.db.users.find(u => u.biometricEnabled && u.name === 'Logan');
-                if (user) {
-                    this.completeLogin(user);
-                } else {
-                    showToast('Face not recognized', 'error');
-                }
-            }
-
-            async simulateFingerprint() {
-                showToast('Reading fingerprint...', 'info');
-                
-                // Simulate fingerprint scan delay
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // Check if user has biometric enabled
-                const user = this.db.users.find(u => u.biometricEnabled && u.name === 'Cherish');
-                if (user) {
-                    this.completeLogin(user);
-                } else {
-                    showToast('Fingerprint not recognized', 'error');
                 }
             }
 
@@ -1820,9 +2439,6 @@
                 
                 // Load team presence
                 this.loadTeamPresence();
-                
-                // Setup navigation
-                this.setupNavigation();
                 
                 // Load default page
                 if (this.currentUser.requiresTimesheet) {
@@ -2346,7 +2962,7 @@
                 
                 const earningsEl = document.getElementById('earningsAmount');
                 if (earningsEl) {
-                    earningsEl.textContent = `$${earnings.toFixed(2)}`;
+                    earningsEl.textContent = `${earnings.toFixed(2)}`;
                 }
             }
 
@@ -2921,7 +3537,7 @@
                 this.currentUser = null;
                 
                 // Clear saved session
-                localStorage.removeItem('mre_saved_session');
+                this.removeData('mre_saved_session');
                 
                 // Log audit
                 this.logAudit('logout');
@@ -2970,10 +3586,6 @@
                             <div class="profile-item">
                                 <span>Two-Factor Authentication:</span>
                                 <strong>${this.currentUser.twoFactorEnabled ? 'Enabled' : 'Disabled'}</strong>
-                            </div>
-                            <div class="profile-item">
-                                <span>Biometric Login:</span>
-                                <strong>${this.currentUser.biometricEnabled ? 'Enabled' : 'Disabled'}</strong>
                             </div>
                             <div class="profile-item">
                                 <span>Last Login:</span>
@@ -3234,7 +3846,7 @@
             tracker.darkMode = !tracker.darkMode;
             document.body.setAttribute('data-theme', tracker.darkMode ? 'dark' : '');
             document.getElementById('themeIcon').textContent = tracker.darkMode ? '☀️' : '🌙';
-            localStorage.setItem('mre_theme', tracker.darkMode ? 'dark' : 'light');
+            tracker.setData('mre_theme', tracker.darkMode ? 'dark' : 'light');
         }
 
         function handleLogin(event) {
@@ -3280,12 +3892,55 @@
             }
         }
 
-        function simulateFaceID() {
-            tracker.simulateFaceID();
+        function showForgotPassword() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('forgotPasswordSection').style.display = 'block';
+            document.getElementById('forgotStep1').style.display = 'block';
+            document.getElementById('forgotStep2').style.display = 'none';
         }
 
-        function simulateFingerprint() {
-            tracker.simulateFingerprint();
+        function backToLogin() {
+            tracker.resetLogin();
+        }
+
+        function sendResetCode() {
+            const email = document.getElementById('forgotEmail').value;
+            if (!email) {
+                showToast('Please enter your email address', 'error');
+                return;
+            }
+            
+            tracker.forgotPassword(email).then(success => {
+                if (success) {
+                    document.getElementById('forgotStep1').style.display = 'none';
+                    document.getElementById('forgotStep2').style.display = 'block';
+                }
+            });
+        }
+
+        function completePasswordReset() {
+            const email = document.getElementById('forgotEmail').value;
+            const code = document.getElementById('resetCode').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            if (!code || !newPassword || !confirmPassword) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                showToast('Password must be at least 8 characters long', 'error');
+                return;
+            }
+            
+            tracker.resetPassword(email, code, newPassword, rememberMe);
         }
 
         function updatePasswordStrength(password) {
@@ -3404,215 +4059,6 @@
                 });
             }
         });
-
-        // Enhanced CSS for better security indicators
-        const style = document.createElement('style');
-        style.textContent = `
-            .toast {
-                position: fixed;
-                bottom: 24px;
-                right: 24px;
-                background: var(--dark);
-                color: white;
-                padding: 16px 24px;
-                border-radius: 8px;
-                box-shadow: var(--shadow-lg);
-                display: none;
-                align-items: center;
-                gap: 12px;
-                animation: slideInUp 0.3s ease;
-                z-index: 1100;
-                max-width: 400px;
-            }
-            
-            .toast.success { background: var(--success); }
-            .toast.error { background: var(--danger); }
-            .toast.warning { background: var(--warning); }
-            .toast.info { background: var(--info); }
-            
-            .modal {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                display: none;
-                align-items: center;
-                justify-content: center;
-                z-index: 1000;
-                padding: 20px;
-                backdrop-filter: blur(4px);
-            }
-            
-            .modal-content {
-                background: var(--white);
-                border-radius: 16px;
-                width: 100%;
-                max-width: 600px;
-                max-height: 90vh;
-                overflow-y: auto;
-                box-shadow: var(--shadow-xl);
-            }
-            
-            .modal-header {
-                padding: 24px;
-                border-bottom: 1px solid #E5E7EB;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-            
-            .modal-title {
-                font-size: 20px;
-                font-weight: 600;
-                color: var(--dark);
-            }
-            
-            .modal-close {
-                width: 32px;
-                height: 32px;
-                border: none;
-                background: var(--light);
-                border-radius: 50%;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.3s ease;
-                font-size: 20px;
-                color: var(--gray);
-            }
-            
-            .modal-close:hover {
-                background: #E5E7EB;
-                transform: rotate(90deg);
-            }
-            
-            .modal-body {
-                padding: 24px;
-            }
-            
-            .modal-footer {
-                padding: 24px;
-                border-top: 1px solid #E5E7EB;
-                display: flex;
-                justify-content: flex-end;
-                gap: 12px;
-            }
-            
-            .btn {
-                padding: 12px 24px;
-                border: none;
-                border-radius: 8px;
-                font-size: 16px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                text-decoration: none;
-            }
-            
-            .btn:hover {
-                transform: translateY(-1px);
-                box-shadow: var(--shadow-md);
-            }
-            
-            .btn:active {
-                transform: translateY(0);
-            }
-            
-            .btn-primary {
-                background: var(--primary);
-                color: white;
-            }
-            
-            .btn-primary:hover {
-                background: var(--primary-dark);
-            }
-            
-            .btn-secondary {
-                background: var(--light);
-                color: var(--dark);
-                border: 2px solid #E5E7EB;
-            }
-            
-            .btn-secondary:hover {
-                background: #F3F4F6;
-            }
-            
-            .btn-success {
-                background: var(--success);
-                color: white;
-            }
-            
-            .btn-danger {
-                background: var(--danger);
-                color: white;
-            }
-            
-            .btn-warning {
-                background: var(--warning);
-                color: white;
-            }
-            
-            .btn-block {
-                width: 100%;
-            }
-            
-            .dropdown-menu {
-                position: absolute;
-                top: 100%;
-                right: 0;
-                background: var(--white);
-                border-radius: 8px;
-                box-shadow: var(--shadow-lg);
-                min-width: 200px;
-                margin-top: 8px;
-                display: none;
-                z-index: 50;
-                overflow: hidden;
-            }
-            
-            .dropdown.active .dropdown-menu {
-                display: block;
-            }
-            
-            .dropdown-item {
-                padding: 12px 16px;
-                color: var(--dark);
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                transition: background 0.3s ease;
-            }
-            
-            .dropdown-item:hover {
-                background: var(--light);
-            }
-            
-            .dropdown-divider {
-                height: 1px;
-                background: #E5E7EB;
-                margin: 8px 0;
-            }
-            
-            .profile-item {
-                display: flex;
-                justify-content: space-between;
-                padding: 12px 0;
-                border-bottom: 1px solid #E5E7EB;
-            }
-            
-            .profile-item:last-child {
-                border-bottom: none;
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
