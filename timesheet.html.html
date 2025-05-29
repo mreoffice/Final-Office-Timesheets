@@ -632,27 +632,52 @@
             text-align: center;
         }
 
-        /* Smart Notifications */
+        /* Smart Notifications - Modern Design */
         .notification-center {
             position: fixed;
             top: 80px;
             right: 20px;
-            width: 360px;
+            width: 380px;
             max-height: 80vh;
             background: var(--white);
             border-radius: 16px;
-            box-shadow: var(--shadow-xl);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             display: none;
             z-index: 99;
             overflow: hidden;
+            border: 1px solid #E5E7EB;
         }
 
         .notification-header {
             padding: 20px;
-            border-bottom: 1px solid #E5E7EB;
+            border-bottom: 1px solid #F3F4F6;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .notification-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .notification-header button {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .notification-header button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
         }
 
         .notification-list {
@@ -662,17 +687,93 @@
 
         .notification-item {
             padding: 16px 20px;
-            border-bottom: 1px solid #E5E7EB;
+            border-bottom: 1px solid #F3F4F6;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
         }
 
         .notification-item:hover {
-            background: var(--light);
+            background: #F8FAFC;
         }
 
         .notification-item.unread {
-            background: #EFF6FF;
+            background: linear-gradient(135deg, #EFF6FF 0%, #F0F9FF 100%);
+            border-left: 4px solid var(--primary);
+        }
+
+        .notification-item.unread::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 12px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        .notification-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .notification-icon.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .notification-icon.info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info);
+        }
+
+        .notification-icon.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .notification-icon.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-message {
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .notification-empty {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--gray);
+        }
+
+        .notification-empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
         }
 
         /* Real-time Earnings Display (Logan Special) */
@@ -1211,7 +1312,88 @@
             color: white;
         }
 
-        /* Profile Styles */
+        /* Settings Tabs */
+        .settings-tabs {
+            display: flex;
+            border-bottom: 2px solid #E5E7EB;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .settings-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+        }
+
+        .settings-tab:hover {
+            color: var(--primary);
+        }
+
+        .settings-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .settings-tab-content {
+            display: none;
+        }
+
+        .settings-tab-content.active {
+            display: block;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
         .profile-item {
             display: flex;
             justify-content: space-between;
@@ -2574,8 +2756,8 @@ MRE SecureTime™ Security Team
                                     <div class="indicator-label">Keyboard Activity</div>
                                 </div>
                                 <div class="activity-indicator">
-                                    <div class="indicator-value" id="focusStatus">${document.hidden ? 'Hidden' : 'Active'}</div>
-                                    <div class="indicator-label">Window Status</div>
+                                    <div class="indicator-value" id="sessionStatus">Active</div>
+                                    <div class="indicator-label">Session Status</div>
                                 </div>
                                 <div class="activity-indicator">
                                     <div class="indicator-value" id="idleTimer">0:00</div>
@@ -2866,18 +3048,38 @@ MRE SecureTime™ Security Team
                 const list = document.getElementById('notificationList');
                 
                 if (this.notifications.length === 0) {
-                    list.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--gray);">No notifications</div>';
+                    list.innerHTML = `
+                        <div class="notification-empty">
+                            <div class="notification-empty-icon">🔔</div>
+                            <div>No notifications yet</div>
+                            <div style="font-size: 12px; margin-top: 4px;">You'll see important updates here</div>
+                        </div>
+                    `;
                     return;
                 }
                 
-                list.innerHTML = this.notifications.map(n => `
-                    <div class="notification-item ${n.read ? '' : 'unread'}" onclick="tracker.markNotificationRead(${n.id})">
-                        <div style="font-weight: 600;">${n.message}</div>
-                        <div style="font-size: 12px; color: var(--gray); margin-top: 4px;">
-                            ${new Date(n.timestamp).toLocaleString()}
+                list.innerHTML = this.notifications.map(n => {
+                    const iconMap = {
+                        success: '✅',
+                        error: '❌',
+                        warning: '⚠️',
+                        info: 'ℹ️'
+                    };
+                    
+                    const timeAgo = this.getTimeAgo(new Date(n.timestamp));
+                    
+                    return `
+                        <div class="notification-item ${n.read ? '' : 'unread'}" onclick="tracker.markNotificationRead(${n.id})">
+                            <div class="notification-icon ${n.type}">
+                                ${iconMap[n.type] || iconMap.info}
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-message">${n.message}</div>
+                                <div class="notification-time">${timeAgo}</div>
+                            </div>
                         </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
 
             markNotificationRead(id) {
@@ -3021,12 +3223,12 @@ MRE SecureTime™ Security Team
                         
                         <div class="form-group">
                             <label class="form-label">Clock In Time</label>
-                            <input type="time" class="form-control" id="requestClockIn" required>
+                            <input type="time" class="form-control" id="requestClockIn" required value="07:00">
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">Clock Out Time</label>
-                            <input type="time" class="form-control" id="requestClockOut" required>
+                            <input type="time" class="form-control" id="requestClockOut" required value="15:30">
                         </div>
                         
                         <div class="form-group">
@@ -3037,13 +3239,24 @@ MRE SecureTime™ Security Team
                         <div class="form-group">
                             <label class="form-label">Reason for Manual Entry</label>
                             <textarea class="form-control" id="requestReason" rows="3" required 
-                                placeholder="Please explain why you need to add this time manually..."></textarea>
+                                placeholder="Please explain why you need to add this time manually (e.g., system error, forgot to clock in, etc.)..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Priority Level</label>
+                            <select class="form-control" id="requestPriority">
+                                <option value="normal">Normal</option>
+                                <option value="urgent">Urgent</option>
+                                <option value="low">Low Priority</option>
+                            </select>
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">Send Request To</label>
                             <select class="form-control" id="requestApprover" required>
                                 <option value="1">Rachael (Admin)</option>
+                                <option value="2">Brad (Admin)</option>
+                                <option value="3">Cherish (Admin)</option>
                                 <option value="4">Logan (Admin)</option>
                             </select>
                         </div>
@@ -3052,6 +3265,7 @@ MRE SecureTime™ Security Team
                             <label class="form-label">Attach Evidence (Optional)</label>
                             <input type="file" class="form-control" id="requestEvidence" 
                                    accept="image/*,.pdf,.doc,.docx">
+                            <small style="color: var(--gray);">Upload screenshots, photos, or documents that support your request</small>
                         </div>
                     </form>
                 `;
@@ -3060,7 +3274,7 @@ MRE SecureTime™ Security Team
                     <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
                     <button class="btn btn-primary" 
                             onclick="document.getElementById('manualTimeForm').dispatchEvent(new Event('submit'))">
-                        Submit Request
+                        📨 Submit Request
                     </button>
                 `;
 
@@ -3074,25 +3288,37 @@ MRE SecureTime™ Security Team
                     id: Date.now(),
                     userId: this.currentUser.id,
                     userName: this.currentUser.name,
+                    userEmail: this.currentUser.email,
                     date: document.getElementById('requestDate').value,
                     clockIn: document.getElementById('requestClockIn').value,
                     clockOut: document.getElementById('requestClockOut').value,
                     breakMinutes: parseInt(document.getElementById('requestBreak').value),
                     reason: this.sanitizer.sanitize(document.getElementById('requestReason').value),
+                    priority: document.getElementById('requestPriority').value,
                     approverId: parseInt(document.getElementById('requestApprover').value),
                     status: 'pending',
                     createdAt: new Date().toISOString(),
-                    evidence: null // Would handle file upload in production
+                    evidence: null, // Would handle file upload in production
+                    adminNotes: '',
+                    reviewedAt: null,
+                    reviewedBy: null
                 };
 
                 this.db.requests.push(request);
                 this.saveSecureDatabase();
                 
-                this.logAudit('manual_time_request', { requestId: request.id });
+                this.logAudit('manual_time_request', { requestId: request.id, priority: request.priority });
                 
                 closeModal();
                 showToast('Time entry request submitted successfully!', 'success');
-                this.addNotification('Your manual time entry request has been submitted for approval', 'info');
+                this.addNotification(`Your ${request.priority} time entry request has been submitted for approval`, 'info');
+                
+                // Notify approver
+                const approver = this.db.users.find(u => u.id === request.approverId);
+                if (approver) {
+                    // In production, send email notification to approver
+                    console.log(`Notification sent to ${approver.name}: New time entry request from ${this.currentUser.name}`);
+                }
             }
 
             // Project Time Allocation
@@ -3338,6 +3564,16 @@ MRE SecureTime™ Security Team
 
                     <div class="card" style="margin-top: 24px;">
                         <div class="card-header">
+                            <h3 class="card-title">Pending Time Requests</h3>
+                            <button class="btn btn-primary" onclick="tracker.showAllRequests()">View All Requests</button>
+                        </div>
+                        <div class="card-body">
+                            ${this.renderPendingRequests()}
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 24px;">
+                        <div class="card-header">
                             <h3 class="card-title">Security Audit Log</h3>
                         </div>
                         <div class="card-body">
@@ -3466,6 +3702,300 @@ MRE SecureTime™ Security Team
                         </div>
                     `;
                 }).join('');
+            }
+
+            renderPendingRequests() {
+                const pendingRequests = this.db.requests.filter(r => r.status === 'pending').slice(0, 5);
+                
+                if (pendingRequests.length === 0) {
+                    return '<p style="text-align: center; color: var(--gray);">No pending requests</p>';
+                }
+                
+                return pendingRequests.map(request => {
+                    const priorityColor = {
+                        urgent: 'var(--danger)',
+                        normal: 'var(--primary)',
+                        low: 'var(--gray)'
+                    };
+                    
+                    const hoursRequested = this.calculateHours(request.clockIn, request.clockOut, request.breakMinutes);
+                    
+                    return `
+                        <div style="padding: 16px; background: var(--light); border-radius: 8px; margin-bottom: 12px; border-left: 4px solid ${priorityColor[request.priority]};">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                <div>
+                                    <h5 style="margin-bottom: 4px;">${request.userName}</h5>
+                                    <div style="font-size: 12px; color: var(--gray);">${new Date(request.createdAt).toLocaleDateString()}</div>
+                                    <div style="font-size: 12px; color: ${priorityColor[request.priority]}; font-weight: 600; text-transform: uppercase;">${request.priority}</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 600;">${hoursRequested} hours</div>
+                                    <div style="font-size: 12px; color: var(--gray);">${request.date}</div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <strong>Time:</strong> ${request.clockIn} - ${request.clockOut}
+                                ${request.breakMinutes > 0 ? `(${request.breakMinutes}min break)` : ''}
+                            </div>
+                            <div style="margin-bottom: 12px; font-size: 14px;">
+                                <strong>Reason:</strong> ${request.reason}
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-success" onclick="tracker.approveRequest(${request.id})" style="padding: 4px 12px; font-size: 12px;">
+                                    ✓ Approve
+                                </button>
+                                <button class="btn btn-danger" onclick="tracker.denyRequest(${request.id})" style="padding: 4px 12px; font-size: 12px;">
+                                    ✗ Deny
+                                </button>
+                                <button class="btn btn-secondary" onclick="tracker.showRequestDetails(${request.id})" style="padding: 4px 12px; font-size: 12px;">
+                                    👁️ Details
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            calculateHours(clockIn, clockOut, breakMinutes = 0) {
+                const start = new Date(`2000-01-01 ${clockIn}`);
+                const end = new Date(`2000-01-01 ${clockOut}`);
+                const diffMs = end - start;
+                const hours = (diffMs / (1000 * 60 * 60)) - (breakMinutes / 60);
+                return hours.toFixed(1);
+            }
+
+            showAllRequests() {
+                const allRequests = this.db.requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                const modalBody = `
+                    <div class="requests-manager">
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                                <select id="requestFilter" onchange="tracker.filterRequests()" class="form-control" style="max-width: 200px;">
+                                    <option value="all">All Requests</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="denied">Denied</option>
+                                </select>
+                                <select id="priorityFilter" onchange="tracker.filterRequests()" class="form-control" style="max-width: 200px;">
+                                    <option value="all">All Priorities</option>
+                                    <option value="urgent">Urgent</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="low">Low</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="requestsList">
+                            ${this.renderAllRequests(allRequests)}
+                        </div>
+                    </div>
+                `;
+
+                showModal('Time Entry Requests Management', modalBody);
+            }
+
+            renderAllRequests(requests) {
+                if (requests.length === 0) {
+                    return '<p style="text-align: center; color: var(--gray); padding: 40px;">No requests found</p>';
+                }
+
+                return requests.map(request => {
+                    const statusColors = {
+                        pending: 'var(--warning)',
+                        approved: 'var(--success)',
+                        denied: 'var(--danger)'
+                    };
+                    
+                    const priorityColors = {
+                        urgent: 'var(--danger)',
+                        normal: 'var(--primary)',
+                        low: 'var(--gray)'
+                    };
+                    
+                    const hoursRequested = this.calculateHours(request.clockIn, request.clockOut, request.breakMinutes);
+                    
+                    return `
+                        <div style="padding: 16px; background: var(--light); border-radius: 8px; margin-bottom: 12px; border-left: 4px solid ${statusColors[request.status]};">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                <div>
+                                    <h5 style="margin-bottom: 4px;">${request.userName}</h5>
+                                    <div style="font-size: 12px; color: var(--gray);">${new Date(request.createdAt).toLocaleString()}</div>
+                                    <div style="display: flex; gap: 8px; margin-top: 4px;">
+                                        <span style="font-size: 11px; color: ${statusColors[request.status]}; font-weight: 600; text-transform: uppercase; background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 4px;">${request.status}</span>
+                                        <span style="font-size: 11px; color: ${priorityColors[request.priority]}; font-weight: 600; text-transform: uppercase; background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 4px;">${request.priority}</span>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 600;">${hoursRequested} hours</div>
+                                    <div style="font-size: 12px; color: var(--gray);">${request.date}</div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                <strong>Time:</strong> ${request.clockIn} - ${request.clockOut}
+                                ${request.breakMinutes > 0 ? `(${request.breakMinutes}min break)` : ''}
+                            </div>
+                            <div style="margin-bottom: 8px; font-size: 14px;">
+                                <strong>Reason:</strong> ${request.reason}
+                            </div>
+                            ${request.adminNotes ? `<div style="margin-bottom: 8px; font-size: 14px; color: var(--gray);">
+                                <strong>Admin Notes:</strong> ${request.adminNotes}
+                            </div>` : ''}
+                            ${request.status === 'pending' ? `
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-success" onclick="tracker.approveRequest(${request.id})" style="padding: 4px 12px; font-size: 12px;">
+                                        ✓ Approve
+                                    </button>
+                                    <button class="btn btn-danger" onclick="tracker.denyRequest(${request.id})" style="padding: 4px 12px; font-size: 12px;">
+                                        ✗ Deny
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            filterRequests() {
+                const statusFilter = document.getElementById('requestFilter').value;
+                const priorityFilter = document.getElementById('priorityFilter').value;
+                
+                let filteredRequests = this.db.requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                if (statusFilter !== 'all') {
+                    filteredRequests = filteredRequests.filter(r => r.status === statusFilter);
+                }
+                
+                if (priorityFilter !== 'all') {
+                    filteredRequests = filteredRequests.filter(r => r.priority === priorityFilter);
+                }
+                
+                document.getElementById('requestsList').innerHTML = this.renderAllRequests(filteredRequests);
+            }
+
+            approveRequest(requestId) {
+                const request = this.db.requests.find(r => r.id === requestId);
+                if (!request) return;
+                
+                // Show approval modal with notes
+                const modalBody = `
+                    <div>
+                        <h4>Approve Time Entry Request</h4>
+                        <p><strong>Employee:</strong> ${request.userName}</p>
+                        <p><strong>Date:</strong> ${request.date}</p>
+                        <p><strong>Time:</strong> ${request.clockIn} - ${request.clockOut}</p>
+                        <p><strong>Hours:</strong> ${this.calculateHours(request.clockIn, request.clockOut, request.breakMinutes)}</p>
+                        
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label class="form-label">Admin Notes (Optional)</label>
+                            <textarea class="form-control" id="adminNotes" rows="3" placeholder="Add any notes about this approval..."></textarea>
+                        </div>
+                    </div>
+                `;
+                
+                const modalFooter = `
+                    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button class="btn btn-success" onclick="tracker.confirmApproval(${requestId})">
+                        ✓ Approve Request
+                    </button>
+                `;
+                
+                showModal('Approve Time Entry', modalBody, modalFooter);
+            }
+
+            confirmApproval(requestId) {
+                const request = this.db.requests.find(r => r.id === requestId);
+                if (!request) return;
+                
+                request.status = 'approved';
+                request.reviewedAt = new Date().toISOString();
+                request.reviewedBy = this.currentUser.id;
+                request.adminNotes = document.getElementById('adminNotes').value;
+                
+                // Add to time entries
+                this.db.sessions.push({
+                    id: Date.now(),
+                    userId: request.userId,
+                    clockIn: `${request.date}T${request.clockIn}:00`,
+                    clockOut: `${request.date}T${request.clockOut}:00`,
+                    breaks: request.breakMinutes > 0 ? [{
+                        start: `${request.date}T12:00:00`,
+                        end: `${request.date}T${this.addMinutes('12:00', request.breakMinutes)}:00`
+                    }] : [],
+                    isManualEntry: true,
+                    approvedBy: this.currentUser.id,
+                    requestId: request.id
+                });
+                
+                this.saveSecureDatabase();
+                this.logAudit('request_approved', { requestId: request.id, userId: request.userId });
+                
+                closeModal();
+                showToast('Time entry request approved!', 'success');
+                
+                // Refresh the display
+                this.showAllRequests();
+            }
+
+            denyRequest(requestId) {
+                const request = this.db.requests.find(r => r.id === requestId);
+                if (!request) return;
+                
+                // Show denial modal with required reason
+                const modalBody = `
+                    <div>
+                        <h4>Deny Time Entry Request</h4>
+                        <p><strong>Employee:</strong> ${request.userName}</p>
+                        <p><strong>Date:</strong> ${request.date}</p>
+                        <p><strong>Time:</strong> ${request.clockIn} - ${request.clockOut}</p>
+                        
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label class="form-label">Reason for Denial (Required)</label>
+                            <textarea class="form-control" id="denialReason" rows="3" required placeholder="Please explain why this request is being denied..."></textarea>
+                        </div>
+                    </div>
+                `;
+                
+                const modalFooter = `
+                    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button class="btn btn-danger" onclick="tracker.confirmDenial(${requestId})">
+                        ✗ Deny Request
+                    </button>
+                `;
+                
+                showModal('Deny Time Entry', modalBody, modalFooter);
+            }
+
+            confirmDenial(requestId) {
+                const reason = document.getElementById('denialReason').value;
+                if (!reason.trim()) {
+                    showToast('Please provide a reason for denial', 'error');
+                    return;
+                }
+                
+                const request = this.db.requests.find(r => r.id === requestId);
+                if (!request) return;
+                
+                request.status = 'denied';
+                request.reviewedAt = new Date().toISOString();
+                request.reviewedBy = this.currentUser.id;
+                request.adminNotes = reason;
+                
+                this.saveSecureDatabase();
+                this.logAudit('request_denied', { requestId: request.id, userId: request.userId });
+                
+                closeModal();
+                showToast('Time entry request denied', 'info');
+                
+                // Refresh the display
+                this.showAllRequests();
+            }
+
+            addMinutes(time, minutes) {
+                const [hours, mins] = time.split(':').map(Number);
+                const totalMinutes = hours * 60 + mins + minutes;
+                const newHours = Math.floor(totalMinutes / 60);
+                const newMins = totalMinutes % 60;
+                return `${newHours.toString().padStart(2, '0')}:${newMins.toString().padStart(2, '0')}`;
             }
 
             renderSecurityLog() {
@@ -3653,40 +4183,199 @@ MRE SecureTime™ Security Team
             showSettings() {
                 const modalBody = `
                     <div class="settings-view">
-                        <h4>Settings</h4>
-                        
-                        <div class="settings-section" style="margin-top: 24px;">
-                            <h5>Notifications</h5>
-                            <label style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
-                                <input type="checkbox" ${this.breakReminders ? 'checked' : ''} 
-                                       onchange="tracker.breakReminders = this.checked">
-                                <span>Break reminders</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
-                                <input type="checkbox" ${this.voiceCommandsEnabled ? 'checked' : ''} 
-                                       onchange="tracker.voiceCommandsEnabled = this.checked">
-                                <span>Voice commands</span>
-                            </label>
+                        <div class="settings-tabs">
+                            <button class="settings-tab active" onclick="showSettingsTab('account')">Account</button>
+                            <button class="settings-tab" onclick="showSettingsTab('notifications')">Notifications</button>
+                            <button class="settings-tab" onclick="showSettingsTab('security')">Security</button>
+                            <button class="settings-tab" onclick="showSettingsTab('preferences')">Preferences</button>
+                            <button class="settings-tab" onclick="showSettingsTab('data')">Data & Privacy</button>
                         </div>
                         
-                        <div class="settings-section" style="margin-top: 24px;">
-                            <h5>Security</h5>
-                            <button class="btn btn-primary" onclick="tracker.changePassword()">
-                                Change Password
-                            </button>
-                            <button class="btn btn-primary" onclick="tracker.enable2FA()" style="margin-left: 12px;">
-                                ${this.currentUser.twoFactorEnabled ? 'Disable' : 'Enable'} 2FA
-                            </button>
+                        <!-- Account Tab -->
+                        <div id="account-tab" class="settings-tab-content active">
+                            <h4>Account Information</h4>
+                            
+                            <div class="settings-section">
+                                <h5>Profile Details</h5>
+                                <div class="form-group">
+                                    <label class="form-label">Display Name</label>
+                                    <input type="text" class="form-control" id="settingsDisplayName" value="${this.currentUser.name}" placeholder="Your display name">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Username/Email</label>
+                                    <input type="email" class="form-control" id="settingsUsername" value="${this.currentUser.email}" placeholder="Your username or email">
+                                    <small style="color: var(--gray);">This is what you'll use to log in</small>
+                                </div>
+                                
+                                <button class="btn btn-primary" onclick="tracker.updateProfile()">
+                                    💾 Save Profile Changes
+                                </button>
+                            </div>
+                            
+                            <div class="settings-section" style="margin-top: 24px;">
+                                <h5>Change Password</h5>
+                                <div class="form-group">
+                                    <label class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" id="settingsCurrentPassword" placeholder="Enter current password">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">New Password</label>
+                                    <input type="password" class="form-control" id="settingsNewPassword" placeholder="Enter new password" minlength="8">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="settingsConfirmPassword" placeholder="Confirm new password" minlength="8">
+                                </div>
+                                <button class="btn btn-primary" onclick="tracker.changePasswordSettings()">
+                                    🔑 Change Password
+                                </button>
+                            </div>
                         </div>
                         
-                        <div class="settings-section" style="margin-top: 24px;">
-                            <h5>Data & Privacy</h5>
-                            <button class="btn btn-primary" onclick="tracker.exportMyData()">
-                                Export My Data
-                            </button>
-                            <button class="btn btn-danger" onclick="tracker.deleteMyData()" style="margin-left: 12px;">
-                                Delete My Data
-                            </button>
+                        <!-- Notifications Tab -->
+                        <div id="notifications-tab" class="settings-tab-content">
+                            <h4>Notification Preferences</h4>
+                            
+                            <div class="settings-section">
+                                <h5>System Notifications</h5>
+                                <label style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
+                                    <input type="checkbox" ${this.breakReminders ? 'checked' : ''} 
+                                           onchange="tracker.breakReminders = this.checked; tracker.saveUserSettings();">
+                                    <span>☕ Break reminders (every 2 hours)</span>
+                                </label>
+                                
+                                <label style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
+                                    <input type="checkbox" ${this.voiceCommandsEnabled ? 'checked' : ''} 
+                                           onchange="tracker.voiceCommandsEnabled = this.checked; tracker.saveUserSettings();">
+                                    <span>🎤 Voice commands</span>
+                                </label>
+                                
+                                <label style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
+                                    <input type="checkbox" ${this.currentUser.settings?.emailNotifications !== false ? 'checked' : ''} 
+                                           onchange="tracker.toggleEmailNotifications(this.checked)">
+                                    <span>📧 Email notifications for approvals</span>
+                                </label>
+                                
+                                <label style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
+                                    <input type="checkbox" ${this.currentUser.settings?.overtimeAlerts !== false ? 'checked' : ''} 
+                                           onchange="tracker.toggleOvertimeAlerts(this.checked)">
+                                    <span>⏰ Overtime alerts (after 8 hours)</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Security Tab -->
+                        <div id="security-tab" class="settings-tab-content">
+                            <h4>Security Settings</h4>
+                            
+                            <div class="settings-section">
+                                <h5>Two-Factor Authentication</h5>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--light); border-radius: 8px; margin: 12px 0;">
+                                    <div>
+                                        <div style="font-weight: 600;">Email-based 2FA</div>
+                                        <div style="font-size: 12px; color: var(--gray);">Get verification codes via email</div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" ${this.currentUser.twoFactorEnabled ? 'checked' : ''} 
+                                               onchange="tracker.toggle2FA(this.checked)">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--light); border-radius: 8px; margin: 12px 0;">
+                                    <div>
+                                        <div style="font-weight: 600;">Session Auto-Lock</div>
+                                        <div style="font-size: 12px; color: var(--gray);">Lock after 30 minutes of inactivity</div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" ${this.currentUser.settings?.autoLock !== false ? 'checked' : ''} 
+                                               onchange="tracker.toggleAutoLock(this.checked)">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <h5>Login Activity</h5>
+                                <div style="max-height: 200px; overflow-y: auto;">
+                                    ${this.renderLoginHistory()}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Preferences Tab -->
+                        <div id="preferences-tab" class="settings-tab-content">
+                            <h4>Personal Preferences</h4>
+                            
+                            <div class="settings-section">
+                                <h5>Appearance</h5>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--light); border-radius: 8px; margin: 12px 0;">
+                                    <div>
+                                        <div style="font-weight: 600;">Dark Mode</div>
+                                        <div style="font-size: 12px; color: var(--gray);">Switch to dark theme</div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" ${this.darkMode ? 'checked' : ''} 
+                                               onchange="toggleTheme()">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <h5>Work Schedule</h5>
+                                <div class="form-group">
+                                    <label class="form-label">Default Start Time</label>
+                                    <input type="time" class="form-control" id="defaultStartTime" 
+                                           value="${this.currentUser.settings?.defaultStartTime || '07:00'}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Default End Time</label>
+                                    <input type="time" class="form-control" id="defaultEndTime" 
+                                           value="${this.currentUser.settings?.defaultEndTime || '15:30'}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Daily Hours Goal</label>
+                                    <input type="number" class="form-control" id="dailyGoal" step="0.5" min="1" max="12"
+                                           value="${this.currentUser.settings?.dailyGoal || '8'}">
+                                </div>
+                                <button class="btn btn-primary" onclick="tracker.saveWorkSchedule()">
+                                    💾 Save Schedule
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Data & Privacy Tab -->
+                        <div id="data-tab" class="settings-tab-content">
+                            <h4>Data & Privacy</h4>
+                            
+                            <div class="settings-section">
+                                <h5>Data Management</h5>
+                                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                                    <button class="btn btn-primary" onclick="tracker.exportMyData()">
+                                        📥 Export My Data
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="tracker.clearActivityData()">
+                                        🗑️ Clear Activity History
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <h5>Privacy Settings</h5>
+                                <label style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
+                                    <input type="checkbox" ${this.currentUser.settings?.shareAnalytics !== false ? 'checked' : ''} 
+                                           onchange="tracker.toggleAnalyticsSharing(this.checked)">
+                                    <span>📊 Share anonymous usage analytics</span>
+                                </label>
+                                
+                                <label style="display: flex; align-items: center; gap: 12px; margin-top: 12px;">
+                                    <input type="checkbox" ${this.currentUser.settings?.trackLocation !== false ? 'checked' : ''} 
+                                           onchange="tracker.toggleLocationTracking(this.checked)">
+                                    <span>📍 Enable location tracking for office verification</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 `;
